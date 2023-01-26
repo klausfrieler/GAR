@@ -12,8 +12,9 @@ GAR_standalone(
   num_stimuli = 10,
   num_rating_items = 6,
  
-    audio_url = "https://s3.eu-west-1.amazonaws.com/media.gold-msi.org/test_materials/GAR/EMO1/",
-  audio_type = tools::file_ext(url),
+    audio_url = "https://s3.eu-west-1.amazonaws.com/media.gold-msi.org/test_materials/GAR/EMO1",
+  audio_type = "wav",
+  with_id = FALSE,
   dict = GAR::GAR_dict,
   random_order = FALSE,
   show_controls = TRUE,
