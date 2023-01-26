@@ -1,0 +1,10 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+..Rcheck/*
+groovescale.Rproj.Rcheck/*
+
+output/sessions/*
+output/results/*
+output/deleted-results/*
