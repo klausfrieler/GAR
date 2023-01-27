@@ -31,6 +31,11 @@ GAR <- function(label = "EMO1",
                 allow_download = FALSE,
                 ...) {
   #browser()
+  quest <- get_questionnaires()
+  if(!(questionnaire %in% quest$id)){
+    stop(sprintf("Unknown questionnaire: %s", questionnaire))
+  }
+  num_rating_items <- max(1, min(num_rating_items, quest[quest$id == questionnaire,]$max_items))
   scale_length <- as.numeric(stringr::str_extract(response_scale, "[0-9]+"))
 
   preamble_key <- sprintf("TGAR_%s_PREAMBLE", questionnaire)

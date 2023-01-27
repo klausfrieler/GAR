@@ -84,12 +84,8 @@ radiobutton_matrix_page <- function(label,
   itemlist <- 1:length(prompts)
   names(itemlist) <- sprintf("item_%02d", 1:length(prompts))
   get_answer <- function(input, ...) {
-    browser()
+    #browser()
     values <- reactiveValuesToList(input)$radio_matrix
-    # values <- radios[str_detect(names(radios), "^item_[0-9]+")] %>%
-    #   unlist() %>%
-    #   names() %>%
-    #   str_extract_all("[0-9]+")
     answer <- purrr::map(values, function(x){
       if(!is.null(x[[1]])) as.numeric(x[[1]])
          else NA
@@ -104,7 +100,6 @@ radiobutton_matrix_page <- function(label,
 
   validate <- function(answer, allow_NA = allow_na, ...) {
     valid  <- TRUE
-    browser()
     if(!allow_NA){
       if(any(is.na(answer))){
         valid <- failed_validation_message

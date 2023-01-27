@@ -4,5 +4,5 @@
 #'
 #' @export
 get_questionnaires <- function(){
-  c("GEN","EMO1", "GRV")
+  tibble(id = c("GEN","EMO1", "GRV"), max_items = c(1, 6, 6))
 }
