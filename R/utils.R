@@ -77,3 +77,24 @@ tdRadioButtons <- function (inputId, label, choices = NULL, selected = NULL, inl
               inputLabel, options)
 }
 
+
+trigger_button_hack <- function(inputId, label, icon = NULL, width = NULL,
+                                enable_after = 0, style = "",
+                                ...) {
+  checkmate::qassert(enable_after, "N1[0,)")
+  inputId <- htmltools::htmlEscape(inputId, attribute = TRUE)
+  shiny::tagList(
+    shiny::actionButton(
+      inputId = inputId, label = label,
+      icon = icon, width = width,
+      onclick = "alert('Clicked');alert(document.getElementsByName('item_01')[1].checked);trigger_button(this.id);",
+      disabled = TRUE,
+      style = style,
+      ...),
+    shiny::tags$script(
+      sprintf("setTimeout(function() {
+                 document.getElementById('%s').disabled = false;
+               }, %i);",
+              inputId, round(enable_after * 1e3))
+    ))
+}

@@ -1,6 +1,6 @@
-#' New multiple radiobutton NAFC page
+#' New radio button matrix page
 #'
-#' Creates a multiple radiobutton n-alternative forced choice page.
+#' Creates a  radio button matrix pag for n items with m Likert-type choices
 #'
 #' @param label (Character scalar) Label for the current page.
 #'
@@ -8,7 +8,7 @@
 #' choices
 #'
 #' @param choices (Character vector) Choices for the participant.
-#' If unnamed, then these values will be used both for radiobutton IDs and for
+#' If unnamed, then these values will be used both for radio button IDs and for
 #' button labels.
 #' If named, then values will be used for button IDs and names
 #' will be used for button labels.
@@ -32,23 +32,29 @@
 #'
 #' @param response_ui_id (Character scalar) HTML ID for the response user interface.
 #'
-#' @inheritParams make_ui_multi_radiobutton_NAFC
+#' @inheritParams make_ui_radiobutton_matrix
 #' @inheritParams psychTestR::page
 #'
 #' @export
-multi_radiobutton_NAFC_page <- function(label,
-                                        prompts,
-                                        choices,
-                                        instruction = NULL,
-                                        labels = NULL,
-                                        trigger_button_text = "Continue",
-                                        failed_validation_message = "Answer missing!",
-                                        save_answer = TRUE,
-                                        hide_response_ui = FALSE,
-                                        random_order = FALSE,
-                                        response_ui_id = "response_ui",
-                                        on_complete = NULL,
-                                        admin_ui = NULL) {
+radiobutton_matrix_page <- function(label,
+                                    prompts,
+                                    choices,
+                                    instruction = NULL,
+                                    labels = NULL,
+                                    anchors = FALSE,
+                                    header = "double",
+                                    reduce_labels = TRUE,
+                                    style = list(label_widths = list("100px", "100px"),
+                                                 div_style = "width:60%;margin-left:20%;margin-right:20%"),
+                                    trigger_button_text = "Continue",
+                                    allow_na = FALSE,
+                                    failed_validation_message = "Answer missing!",
+                                    save_answer = TRUE,
+                                    hide_response_ui = FALSE,
+                                    random_order = FALSE,
+                                    response_ui_id = "response_ui",
+                                    on_complete = NULL,
+                                    admin_ui = NULL) {
   stopifnot(
     is.scalar.character(label),
     is.character.vector(prompts),
@@ -64,38 +70,47 @@ multi_radiobutton_NAFC_page <- function(label,
     instruction_tag <- tagify(instruction)
   }
   ui <- shiny::tags$div(instruction_tag,
-                        make_ui_multi_radiobuttons(label,
+                        make_ui_radiobutton_matrix(label,
                                                    items = prompts,
                                                    scale_labels = labels,
                                                    choices,
+                                                   style = style,
                                                    trigger_button_text = trigger_button_text,
+                                                   anchors = anchors,
+                                                   header = header,
+                                                   reduce_labels = reduce_labels,
                                                    hide = hide_response_ui,
                                                    id = response_ui_id))
   itemlist <- 1:length(prompts)
   names(itemlist) <- sprintf("item_%02d", 1:length(prompts))
   get_answer <- function(input, ...) {
     browser()
-    radios <- reactiveValuesToList(input)
-    values <- radios[str_detect(names(radios), "^item_[0-9]+")] %>%
-      unlist() %>%
-      names() %>%
-      str_extract_all("[0-9]+")
+    values <- reactiveValuesToList(input)$radio_matrix
+    # values <- radios[str_detect(names(radios), "^item_[0-9]+")] %>%
+    #   unlist() %>%
+    #   names() %>%
+    #   str_extract_all("[0-9]+")
     answer <- purrr::map(values, function(x){
-      as.numeric(x[[1]])
-    })
+      if(!is.null(x[[1]])) as.numeric(x[[1]])
+         else NA
+    }) %>% unlist()
+    #names(answer) <- stringr::str_remove_all(stringr::str_replace_all(tolower(names(answer)), " ", "_"), "[.]")
+
     names(answer) <- sprintf("%s.q%d", label, 1:length(values))
     print(answer)
     answer
 
   }
 
-  validate <- function(answer, ...) {
+  validate <- function(answer, allow_NA = allow_na, ...) {
+    valid  <- TRUE
     browser()
-    if (sum(unlist(lapply(1:length(prompts), function(i) !is.null(answer[[i]])))) == length(prompts)) {
-      TRUE
-    } else {
-      failed_validation_message
+    if(!allow_NA){
+      if(any(is.na(answer))){
+        valid <- failed_validation_message
+      }
     }
+    valid
   }
   psychTestR::page(ui = ui,
                    label = label,
@@ -108,117 +123,51 @@ multi_radiobutton_NAFC_page <- function(label,
   )
 }
 
-#' Make multiple NAFC radiobuttons with the same choices
+#' New radio button matrix page
 #'
-#' Creates the HTML code for multiple n-alternative forced choice response
-#' radiobutton options
+#' Creates a  radio button matrix pag for n items with m Likert-type choices
 #'
 #' @param label (Character scalar) Label for the current page.
 #'
-#' @param prompts (Character vector) Prompts to be displayed over the response
+#' @param items (Character vector) Prompts to be displayed over the response
 #' choices
 #'
-#' @param choices (Character vector) Choices for the participant.
-#' If unnamed, then these values will be used both for radiobutton IDs and for
-#' button labels.
-#' If named, then values will be used for button IDs and names
-#' will be used for button labels.
-#'
-#' @param labels Optional vector of labels for the NAFC radiobutton choices.
+#' @param scale_labels Optional vector of labels for the radio button choices.
 #' If not \code{NULL}, will overwrite the names of \code{choices}.
 #' This vector of labels can either be a character vector
 #' or a list of Shiny tag objects, e.g. as created by \code{shiny::HTML()}.
 #'
+#' @param choices (Character vector) Choices for the participant.
+#' If unnamed, then these values will be used both for radio button IDs and for
+#' button labels.
+#' If named, then values will be used for button IDs and names
+#' will be used for button labels.
+#'
 #' @param trigger_button_text (Character scalar) Text for the trigger button.
 #'
-#' @param hide (Boolean scalar) Whether the radiobuttons should be hidden
-#' (possibly to be shown later).
+#' @param hide (Boolean scalar) Whether to begin with the response
+#' interface hidden (it can be subsequently made visible through Javascript,
+#' using the element ID as set in \code{response_ui_id}.
+#' See \link[psychTestR]{audio_NAFC_page} for an example.).
 #'
-#' @param random_order (Boolean scalar) Whether the order of the items should
-#' be randomized.
+#' @param id (character scalar) ID for the response ui
 #'
-#' @param id (Character scalar) HTML ID for the div containing the radiobuttons.
+#' @inheritParams psychTestR::page
 #'
 #' @export
-make_ui_multi_radiobutton_NAFC <- function(label,
-                                           prompts,
-                                           choices,
-                                           labels = NULL,
-                                           trigger_button_text = "Continue",
-                                           hide = FALSE,
-                                           random_order = FALSE,
-                                           id = "response_ui") {
-  stopifnot(
-    is.character.or.numeric(choices) && length(choices) > 0L,
-    is.scalar.logical(hide),
-    is.scalar.logical(random_order),
-    is.null(labels) ||
-      ((is.character(labels) || is.list(labels)) &&
-         length(labels) == length(choices)
-      )
-  )
-  if (is.null(labels)) {
-    labels <- if (is.null(names(choices)))
-      choices
-    else
-      names(choices)
-  }
-  labels <-
-    purrr::map(labels, function(label)
-      shiny::tags$span(style = "font-size: 15px; line-height: 15px;", label))
-
-  order <- if(random_order) {sample(1:length(prompts))} else 1:length(prompts)
-  #browser()
-  reduced_labels <- rep("", length(labels))
-  reduced_labels[1] <- labels[1]
-  reduced_labels[length(reduced_labels)] <- labels[length(reduced_labels)]
-
-  multi_radiobuttons_div <- shiny::tags$div(
-    mapply(function(prompt_number) {
-      shiny::tags$div(style = "margin-left:10%;width:80%;text-align: left;",
-                      shiny::tags$b(prompts[prompt_number]),
-                      shiny::radioButtons(inputId = paste0("item", prompt_number),
-                                          label = "",
-                                          choiceNames = reduced_labels,
-                                          choiceValues = choices,
-                                          inline = TRUE,
-                                          selected = character(0)))
-    }, order, SIMPLIFY = FALSE, USE.NAMES = FALSE)
-  )
-
-  shiny::tags$div(id = id,
-                  style = "inline-block;",
-                  multi_radiobuttons_div,
-                  psychTestR::trigger_button("next", trigger_button_text)
-  )
-}
-
-
-
-get_radio_button_row <- function(prompt, group_id, values, label = ""){
-  if(is.scalar.character(prompt))
-    prompt <- tagify(prompt)
-  style <- "border:1px solid black;max-width:250px;min-width:250px;padding:0px;text-align:center;vertical-align:center"
-  row <-
-    tdRadioButtons(inputId = group_id,
-                   label = label,
-                   choiceNames = rep("", length(values)),
-                   choiceValues = values,
-                   inline = TRUE,
-                   selected = NULL)
-
-  shiny::tags$tr(
-    shiny::tags$td(prompt,
-                   style = "font-size:12pt;vertical-align:center;border:1px solid black;text-align:left;display:block;padding:2px"),
-    shiny::tagList(row))
-}
-
-
-make_ui_multi_radiobuttons <- function(label,
+make_ui_radiobutton_matrix <- function(label,
                                        items = NULL,
                                        scale_labels = NULL,
                                        choices = 1:length(scale_labels),
                                        reduce_labels = TRUE,
+                                       anchors = TRUE,
+                                       style = list(label_widths = list("100px", "100px"),
+                                                    item_width = "200px",
+                                                    div_style = "width:60%;margin-left:20%;margin-right:20%"),
+                                       header = c(
+                                                  "simple_num",
+                                                  "simple_str",
+                                                  "double"),
                                        trigger_button_text = "Continue",
                                        hide = FALSE,
                                        id = "response_ui") {
@@ -226,6 +175,10 @@ make_ui_multi_radiobuttons <- function(label,
     is.character.or.numeric(choices) && length(choices) > 0L,
     is.scalar.logical(hide)
   )
+  header <- match.arg(header)
+  if(is.null(style$item_width)){
+    item_width <- "200px%"
+  }
   if (is.null(scale_labels)) {
     scale_labels <- if (is.null(names(choices)))
       choices
@@ -237,54 +190,48 @@ make_ui_multi_radiobuttons <- function(label,
   reduced_labels[length(reduced_labels)] <- scale_labels[length(reduced_labels)]
   if(reduce_labels){
     scale_labels <- reduced_labels
+    print("Reduced labels")
   }
-  header_row1 <-
-    shiny::tags$tr(
-      shiny::tags$td(""),
-      shiny::tagList(purrr::map(scale_labels, function(label)
-      shiny::tags$td(style = "font-size: 15px; line-height: 15px;border:1px solid black;width:15px", label))))
 
-  #row1_style <- "font-size: 15px; line-height: 15px;border:1px solid black;float:left; display:block"
-  row1_style  <- ""
-  row2_style  <- "font-size: 12pt;line-height:24pt;border:1px solid black;text-align:center"
-  table_style <- "border:1px solid black;line-height:24pt;margin-bottom:12pt"
-  #n <- length(scale_labels)
-  # eff_labels <-scale_labels
-  # eff_labels[2:(n-1)] <- ""
+  if(header == "simple_num"){
+    choiceNames <- 1:length(scale_labels)
+  }
+  else if(header == "simple_str"){
+    choiceNames <- scale_labels
+  }
+  else {
+    choiceNames <- lapply(1:length(scale_labels), function(i)
+      shiny::tags$span(scale_labels[i], shiny::tags$br(), i))
 
-  header_row1 <-
-    shiny::tags$tr(
-      purrr::map(c("", scale_labels), ~{shiny::tags$td(.x, style = row1_style)})
-  )
-
-  header_row2 <-
-    shiny::tags$tr(
-      shiny::tags$td(""),
-      shiny::tagList(purrr::map(1:length(scale_labels), function(label)
-        shiny::tags$td(style = row2_style, label))))
-
+  }
+  if(anchors){
+    rowLLabels = rep(scale_labels[1], length(items))
+    rowRLabels = rep(scale_labels[length(scale_labels)], length(items))
+  }
+  else{
+    rowLLabels = rep("", length(items))
+    rowRLabels = rep("", length(items))
+  }
   #browser()
-  table_body <- shiny::tags$div(
-    purrr::map(1:length(items),
-          function(idx) {#
-            get_radio_button_row(prompt = shiny::span(items[idx]),
-                                 group_id = sprintf("item_%02d", idx),
-                                 values = 1:length(scale_labels))
-    })
-  )
-  item_table <-
-    shiny::tags$table(
-      header_row1,
-      header_row2,
-      table_body,
-      style = table_style
-    )
-
+  rowIDs <- lapply(items, function(it){
+    shiny::div(it, style = sprintf("min-width:%s;white-space: normal;", style$item_width))
+  })
+  item_table <- shinyRadioMatrix::radioMatrixInput(inputId = "radio_matrix",
+                                                   rowLLabels = rowLLabels,
+                                                   rowRLabels = rowRLabels,
+                                                   rowIDs = rowIDs,
+                                                   rowIDsName = "",
+                                                   #choices = 1:length(reduced_labels),
+                                                   choiceNames = choiceNames,
+                                                   choiceValues = 1:length(reduced_labels),
+                                                   selected = NULL,
+                                                   labelsWidth = style$label_widths)
   shiny::tags$div(id = id,
-                  style = "inline-block;",
+                  style = style$div_style,
                   item_table,
                   psychTestR::trigger_button("next", trigger_button_text)
   )
+
 }
 
 media.js <- list(
@@ -304,9 +251,9 @@ media_mobile_play_button <- function(btn_play_prompt) shiny::tags$p(
                      id = "btn_play_media",
                      style = "visibility: hidden",
                      onclick = media.js$play_media))
-#' Make multiple radiobutton NAFC audio page
+#' Make radiobutton matrix audio page
 #'
-#' Creates a multiple radiobutton n-alternative forced choice page for a single audio file.
+#' Creates a  radiobutton matrix page for a single audio file.
 #'
 #' @param url URL to the audio. Can be an absolute URL (e.g.
 #' "http://mysite.com/audio.mp3") or a URL relative to the /www directory (e.g.
@@ -320,31 +267,37 @@ media_mobile_play_button <- function(btn_play_prompt) shiny::tags$p(
 #' response buttons.
 #' @param loop Whether the audio should loop.
 #'
-#' @inherit multi_radiobutton_NAFC_page
+#' @inherit radiobutton_matrix_page
 #' @inherit psychTestR::page
-#' @inherit make_ui_multi_radiobutton_NAFC
+#' @inherit make_ui_radiobutton_matrix
 #'
 #' @export
-audio_multi_radiobutton_NAFC_page <- function(label,
-                                              prompts,
-                                              choices,
-                                              url,
-                                              instruction = "",
-                                              labels = NULL,
-                                              type = tools::file_ext(url),
-                                              trigger_button_text = "Continue",
-                                              failed_validation_message = "Answer missing!",
-                                              save_answer = TRUE,
-                                              hide_response_ui = FALSE,
-                                              random_order = FALSE,
-                                              response_ui_id = "response_ui",
-                                              on_complete = NULL,
-                                              wait = TRUE,
-                                              loop = FALSE,
-                                              admin_ui = NULL,
-                                              btn_play_prompt = if (!show_controls) "Click here to play",
-                                              show_controls = FALSE,
-                                              allow_download = FALSE) {
+audio_radiobutton_matrix_page <- function(label,
+                                          prompts,
+                                          choices,
+                                          url,
+                                          instruction = "",
+                                          labels = NULL,
+                                          anchors = FALSE,
+                                          header = "double",
+                                          style = list(label_widths = list("100px", "100px"),
+                                                       div_style = "width:60%;margin-left:20%;margin-right:20%"),
+                                          reduce_labels = TRUE,
+                                          trigger_button_text = "Continue",
+                                          allow_na = FALSE,
+                                          failed_validation_message = "Answer missing!",
+                                          save_answer = TRUE,
+                                          hide_response_ui = FALSE,
+                                          random_order = FALSE,
+                                          response_ui_id = "response_ui",
+                                          on_complete = NULL,
+                                          audio_type = tools::file_ext(url),
+                                          wait = TRUE,
+                                          loop = FALSE,
+                                          admin_ui = NULL,
+                                          btn_play_prompt = if (!show_controls) "Click here to play",
+                                          show_controls = FALSE,
+                                          allow_download = FALSE) {
   stopifnot(is.scalar.character(label),
             is.character.or.numeric(choices),
             is.scalar.character(url),
@@ -355,7 +308,7 @@ audio_multi_radiobutton_NAFC_page <- function(label,
             is.scalar.logical(hide_response_ui))
   audio_ui <- shiny::tags$div(shiny::tags$audio(
     shiny::tags$head(shiny::tags$script(shiny::HTML(media.js$media_not_played))),
-    shiny::tags$source(src = url, type = paste0("audio/", type)),
+    shiny::tags$source(src = url, type = paste0("audio/", audio_type)),
     id = "media",
     preload = "auto",
     autoplay = "autoplay",
@@ -367,25 +320,25 @@ audio_multi_radiobutton_NAFC_page <- function(label,
     controlsList = if (!allow_download) "nodownload"
   ), media_mobile_play_button(btn_play_prompt))
   #browser()
-  deselect_script <- sprintf("
-  for(var i = 1; i <= %s; ++i ){
-    var radios = document.getElementsByName('item_0' + i);
-    for(var j = 0; j < radios.length; ++j){
-      radios[j].checked = false;
-    }
-  }", length(choices))
-  deselect_script_tag <- (shiny::tags$script(shiny::HTML(deselect_script)))
   instruction2 <- shiny::tags$div(tagify(instruction),
-                                  audio_ui, deselect_script_tag)
+                                  audio_ui)
 
-  multi_radiobutton_NAFC_page(label = label, prompts = prompts, choices = choices, labels = labels,
-                              trigger_button_text = trigger_button_text,
-                              failed_validation_message = failed_validation_message,
-                              save_answer = save_answer,
-                              hide_response_ui = hide_response_ui,
-                              random_order = random_order,
-                              response_ui_id = response_ui_id,
-                              on_complete = on_complete,
-                              admin_ui = admin_ui,
-                              instruction = instruction2)
+  radiobutton_matrix_page(label = label,
+                          prompts = prompts,
+                          choices = choices,
+                          labels = labels,
+                          anchors = anchors,
+                          header = header,
+                          reduce_labels = reduce_labels,
+                          style = style,
+                          trigger_button_text = trigger_button_text,
+                          allow_na = allow_na,
+                          failed_validation_message = failed_validation_message,
+                          save_answer = save_answer,
+                          hide_response_ui = hide_response_ui,
+                          random_order = random_order,
+                          response_ui_id = response_ui_id,
+                          on_complete = on_complete,
+                          admin_ui = admin_ui,
+                          instruction = instruction2)
 }

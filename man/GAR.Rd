@@ -3,15 +3,21 @@
 \docType{package}
 \name{GAR}
 \alias{GAR}
-\title{General Audio Ration component}
+\title{General Audio Rating modules}
 \usage{
 GAR(
   label = "EMO1",
-  type = "EMO1",
+  questionnaire = "EMO1",
   response_scale = "L7",
   items_prefix_pattern = "s\%02d",
   num_stimuli = 10,
   num_rating_items = 6,
+  anchors = FALSE,
+  header = "double",
+  reduce_labels = TRUE,
+  style = list(label_widths = list("100px", "100px"), div_style =
+    "width:60\%;margin-left:20\%;margin-right:20\%"),
+  allow_na = TRUE,
  
     audio_url = "https://s3.eu-west-1.amazonaws.com/media.gold-msi.org/test_materials/GAR/EMO1",
   audio_type = "wav",
@@ -24,11 +30,6 @@ GAR(
 }
 \arguments{
 \item{label}{(Character scalar) Label for the current page.}
-
-\item{type}{Audio type (e.g. 'mp3'). Defaults to the provided file extension.}
-
-\item{random_order}{(Boolean scalar) Whether the order of the items should
-be randomized.}
 
 \item{show_controls}{Whether or not to show audio controls to the
 participant, so that they can control audio playback.}

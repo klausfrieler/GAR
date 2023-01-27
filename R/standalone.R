@@ -7,11 +7,17 @@
 #'
 #' @export
 GAR_standalone <- function(label = "EMO1",
-                           type = "EMO1",
+                           questionnaire = "EMO1",
                            response_scale = "L7",
                            items_prefix_pattern = "s%02d",
                            num_stimuli = 10,
                            num_rating_items = 6,
+                           anchors = FALSE,
+                           header = "double",
+                           reduce_labels = TRUE,
+                           style = list(label_widths = list("100px", "100px"),
+                                        div_style = "width:60%;margin-left:20%;margin-right:20%"),
+                           allow_na = FALSE,
                            audio_url = "https://s3.eu-west-1.amazonaws.com/media.gold-msi.org/test_materials/GAR/EMO1",
                            audio_type = "wav",
                            with_id = FALSE,
@@ -34,14 +40,19 @@ GAR_standalone <- function(label = "EMO1",
       dict = dict
     ),
     GAR(label = label,
-        type = type,
+        questionnaire = questionnaire,
         response_scale = response_scale,
         items_prefix_pattern = items_prefix_pattern,
         num_stimuli = num_stimuli,
         num_rating_items = num_rating_items,
+        header = header,
+        anchors = anchors,
+        reduce_labels = reduce_labels,
+        style = style,
         audio_url = audio_url,
         audio_type = audio_type,
         dict = dict,
+        allow_na = allow_na,
         random_order = random_order,
         show_controls = show_controls,
         allow_download = allow_download,
@@ -53,7 +64,7 @@ GAR_standalone <- function(label = "EMO1",
     )
   title <- unlist(setNames(
     purrr::map(GAR::languages(), function(x)
-      GAR_dict$translate(sprintf("TGAR_%s_TITLE", type), x)),
+      GAR_dict$translate(sprintf("TGAR_%s_TITLE", questionnaire), x)),
     GAR::languages()
   ))
   psychTestR::make_test(elts,
