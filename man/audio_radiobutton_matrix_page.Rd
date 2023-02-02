@@ -6,6 +6,7 @@
 \usage{
 audio_radiobutton_matrix_page(
   label,
+  polarity = c("unipolar", "bipolar"),
   prompts,
   choices,
   url,

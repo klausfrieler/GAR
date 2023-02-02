@@ -6,6 +6,7 @@
 \usage{
 make_ui_radiobutton_matrix(
   label,
+  polarity = c("unipolar", "bipolar"),
   items = NULL,
   scale_labels = NULL,
   choices = 1:length(scale_labels),

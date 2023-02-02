@@ -12,6 +12,7 @@ GAR(
   items_prefix_pattern = "s\%02d",
   num_stimuli = 10,
   num_rating_items = 6,
+  polarity = c("unipolar", "bipolar"),
   anchors = FALSE,
   header = "double",
   reduce_labels = TRUE,

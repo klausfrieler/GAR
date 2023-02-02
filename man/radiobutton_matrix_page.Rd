@@ -6,6 +6,7 @@
 \usage{
 radiobutton_matrix_page(
   label,
+  polarity = c("unipolar", "bipolar"),
   prompts,
   choices,
   instruction = NULL,

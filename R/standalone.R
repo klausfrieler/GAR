@@ -7,6 +7,7 @@
 #'
 #' @export
 GAR_standalone <- function(label = "EMO1",
+                           polarity = c("unipolar", "bipolar"),
                            questionnaire = "EMO1",
                            response_scale = "L7",
                            items_prefix_pattern = "s%02d",
@@ -45,6 +46,7 @@ GAR_standalone <- function(label = "EMO1",
         items_prefix_pattern = items_prefix_pattern,
         num_stimuli = num_stimuli,
         num_rating_items = num_rating_items,
+        polarity = polarity,
         header = header,
         anchors = anchors,
         reduce_labels = reduce_labels,
@@ -57,6 +59,11 @@ GAR_standalone <- function(label = "EMO1",
         show_controls = show_controls,
         allow_download = allow_download,
         ...),
+    psychTestR::code_block(function(state, ...){
+      res <- psychTestR::get_results(state, complete = T, add_session_info = F)
+      browser()
+      res
+    }),
     psychTestR::new_timeline(
       psychTestR::final_page(shiny::p(psychTestR::i18n("RESULTS_SAVED"),
                                       psychTestR::i18n("CLOSE_BROWSER"))),
