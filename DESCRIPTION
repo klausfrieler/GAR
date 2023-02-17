@@ -25,9 +25,6 @@ RdMacros:
     Rdpack
 Remotes:
     pmcharrison/psychTestR
-<<<<<<< HEAD
-RoxygenNote: 7.2.3
-=======
     klausfrieler/shinyRadioMatrix
 RoxygenNote: 7.1.1
->>>>>>> 234e28554cb461a2b3638370fa886beae832385a
+
