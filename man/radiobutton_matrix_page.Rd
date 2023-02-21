@@ -6,7 +6,6 @@
 \usage{
 radiobutton_matrix_page(
   label,
-  polarity = c("unipolar", "bipolar"),
   prompts,
   choices,
   instruction = NULL,
@@ -22,6 +21,7 @@ radiobutton_matrix_page(
   save_answer = TRUE,
   hide_response_ui = FALSE,
   random_order = FALSE,
+  newparams = 1,
   response_ui_id = "response_ui",
   on_complete = NULL,
   admin_ui = NULL
