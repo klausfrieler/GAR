@@ -37,5 +37,5 @@ NULL
 #' @importFrom stringr "str_extract_all"
 NULL
 
-#' @importFrom stringr "str_detect"
+#' @importFrom stringr "str_extract"
 NULL

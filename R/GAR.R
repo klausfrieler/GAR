@@ -17,7 +17,6 @@ GAR <- function(label = "EMO1",
                 items_prefix_pattern = "s%02d",
                 num_stimuli = 10,
                 num_rating_items = 6,
-                polarity = c("unipolar", "bipolar"),
                 anchors = FALSE,
                 header = "double",
                 reduce_labels = TRUE,
@@ -36,14 +35,13 @@ GAR <- function(label = "EMO1",
   if(!(questionnaire %in% quest$id)){
     stop(sprintf("Unknown questionnaire: %s", questionnaire))
   }
-  polarity <- match.arg(polarity)
   num_rating_items <- max(1, min(num_rating_items, quest[quest$id == questionnaire,]$max_items))
-  #browser()
   scale_length <- as.numeric(stringr::str_extract(response_scale, "[0-9]+"))
 
   preamble_key <- sprintf("TGAR_%s_PREAMBLE", questionnaire)
   prompt_key <- sprintf("TGAR_%s_%%04d_PROMPT", questionnaire, num_rating_items)
   label_key <- sprintf("TGAR_%s_CHOICE%%01d", response_scale)
+
   gar <- psychTestR::join(
     lapply(1:num_stimuli, function(id){
       page_label <- sprintf("%s_%02d", label, id)
@@ -52,24 +50,21 @@ GAR <- function(label = "EMO1",
                                                    audio_type))
       #browser()
       psychTestR::new_timeline(
-        get_item_page(polarity = polarity,
-                      page_label = page_label,
-                      stimulus_url = stimulus_url,
-                      preamble_key = preamble_key,
-                      anchors = anchors,
-                      header = header,
-                      reduce_labels = reduce_labels,
-                      style = style,
-                      scale_length = scale_length,
-                      num_rating_items = num_rating_items,
-                      prompt_key = prompt_key,
-                      label_key = label_key,
-                      random_order = random_order,
-                      show_controls = show_controls,
-                      allow_download = allow_download,
-                      allow_na = allow_na,
-                      ...
-                      ),
+        audio_radiobutton_matrix_page(label = page_label,
+                                      url = stimulus_url,
+                                      instruction = psychTestR::i18n(preamble_key),
+                                      anchors = anchors,
+                                      header = header,
+                                      reduce_labels = reduce_labels,
+                                      style = style,
+                                      prompts = sapply(1:num_rating_items, function(x) psychTestR::i18n(sprintf(prompt_key, x)), simplify = T, USE.NAMES = T),
+                                      choices = 0:(scale_length-1),
+                                      labels = sapply(1:scale_length, function(x) psychTestR::i18n(sprintf(label_key, x)), simplify = T, USE.NAMES = T),
+                                      random_order = random_order,
+                                      show_controls = show_controls,
+                                      allow_download = allow_download,
+                                      allow_na = allow_na,
+                                      ...),
         dict = dict)
     }))
   #browser()

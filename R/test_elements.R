@@ -37,13 +37,12 @@
 #'
 #' @export
 radiobutton_matrix_page <- function(label,
-                                    polarity = c("unipolar", "bipolar"),
                                     prompts,
                                     choices,
                                     instruction = NULL,
                                     labels = NULL,
                                     anchors = FALSE,
-                                    header = c("double", "simple_str", "simple_num"),
+                                    header = "double",
                                     reduce_labels = TRUE,
                                     style = list(label_widths = list("100px", "100px"),
                                                  div_style = "width:60%;margin-left:20%;margin-right:20%"),
@@ -72,7 +71,6 @@ radiobutton_matrix_page <- function(label,
   }
   ui <- shiny::tags$div(instruction_tag,
                         make_ui_radiobutton_matrix(label,
-                                                   polarity = polarity,
                                                    items = prompts,
                                                    scale_labels = labels,
                                                    choices,
@@ -153,7 +151,6 @@ radiobutton_matrix_page <- function(label,
 #'
 #' @export
 make_ui_radiobutton_matrix <- function(label,
-                                       polarity = c("unipolar", "bipolar"),
                                        items = NULL,
                                        scale_labels = NULL,
                                        choices = 1:length(scale_labels),
@@ -173,7 +170,6 @@ make_ui_radiobutton_matrix <- function(label,
     is.character.or.numeric(choices) && length(choices) > 0L,
     is.scalar.logical(hide)
   )
-  polarity <- match.arg(polarity)
   header <- match.arg(header)
   if(is.null(style$item_width)){
     item_width <- "200px%"
@@ -189,53 +185,32 @@ make_ui_radiobutton_matrix <- function(label,
   reduced_labels[length(reduced_labels)] <- scale_labels[length(reduced_labels)]
   if(reduce_labels){
     scale_labels <- reduced_labels
+    print("Reduced labels")
   }
 
   if(header == "simple_num"){
-    if(polarity == "unipolar") {
-      choiceNames <- 1:length(scale_labels)
-    }
-    else{
-      choiceNames <- abs(choices)
-
-    }
+    choiceNames <- 1:length(scale_labels)
   }
   else if(header == "simple_str"){
     choiceNames <- scale_labels
   }
   else {
-    if(polarity == "unipolar") {
-      sub_labels <- 1:length(scale_labels)
-    }
-    else{
-      sub_labels <- abs(choices)
-    }
-
     choiceNames <- lapply(1:length(scale_labels), function(i)
-      shiny::tags$span(scale_labels[i], shiny::tags$br(), sub_labels[[i]]))
+      shiny::tags$span(scale_labels[i], shiny::tags$br(), i))
 
   }
-  if(polarity == "unipolar"){
-    if(anchors){
-      rowLLabels = rep(scale_labels[1], length(items))
-      rowRLabels = rep(scale_labels[length(scale_labels)], length(items))
-    }
-    else{
-      rowLLabels = rep("", length(items))
-      rowRLabels = rep("", length(items))
-    }
+  if(anchors){
+    rowLLabels = rep(scale_labels[1], length(items))
+    rowRLabels = rep(scale_labels[length(scale_labels)], length(items))
   }
   else{
-    rowLLabels = lapply(stringr::str_split(items, "-"), function(it) it[[1]]) %>% unlist()
-    rowRLabels = lapply(stringr::str_split(items, "-"), function(it) it[[2]]) %>% unlist()
+    rowLLabels = rep("", length(items))
+    rowRLabels = rep("", length(items))
   }
-  rowIDS_style <- c("unipolar" = "min-width:%s;white-space:normal;",
-                    "bipolar" = "width:0px; visibility:hidden")
-  rowIDs <- lapply(items, function(it){
-    shiny::div(it,
-               style = sprintf(rowIDS_style[polarity],style$item_width))
-  })
   #browser()
+  rowIDs <- lapply(items, function(it){
+    shiny::div(it, style = sprintf("min-width:%s;white-space: normal;", style$item_width))
+  })
   item_table <- shinyRadioMatrix::radioMatrixInput(inputId = "radio_matrix",
                                                    rowLLabels = rowLLabels,
                                                    rowRLabels = rowRLabels,
@@ -243,14 +218,9 @@ make_ui_radiobutton_matrix <- function(label,
                                                    rowIDsName = "",
                                                    #choices = 1:length(reduced_labels),
                                                    choiceNames = choiceNames,
-                                                   choiceValues = choices,
+                                                   choiceValues = 1:length(reduced_labels),
                                                    selected = NULL,
-                                                   labelsWidth = style$label_widths,
-                                                   LLabelStyle = "",
-                                                   RLabelStyle = "",
-                                                   choiceStyle = "",
-                                                   LLabPos = 0,
-                                                   RLabPos = length(reduced_labels) + 1)
+                                                   labelsWidth = style$label_widths)
   shiny::tags$div(id = id,
                   style = style$div_style,
                   item_table,
@@ -298,7 +268,6 @@ media_mobile_play_button <- function(btn_play_prompt) shiny::tags$p(
 #'
 #' @export
 audio_radiobutton_matrix_page <- function(label,
-                                          polarity = c("unipolar", "bipolar"),
                                           prompts,
                                           choices,
                                           url,
@@ -350,7 +319,6 @@ audio_radiobutton_matrix_page <- function(label,
                                   audio_ui)
 
   radiobutton_matrix_page(label = label,
-                          polarity = polarity,
                           prompts = prompts,
                           choices = choices,
                           labels = labels,
