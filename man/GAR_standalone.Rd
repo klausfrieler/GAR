@@ -17,8 +17,8 @@ GAR_standalone(
   style = list(label_widths = list("100px", "100px"), div_style =
     "width:60\%;margin-left:20\%;margin-right:20\%"),
   allow_na = FALSE,
-  audio_url =
-    "https://s3.eu-west-1.amazonaws.com/media.gold-msi.org/test_materials/GAR/EMO1",
+ 
+    audio_url = "https://s3.eu-west-1.amazonaws.com/media.gold-msi.org/test_materials/GAR/EMO1",
   audio_type = "wav",
   with_id = FALSE,
   dict = GAR::GAR_dict,
