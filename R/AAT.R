@@ -28,7 +28,7 @@ AAT <- function(label = "AAT",
                                                    sprintf(items_prefix_pattern, id),
                                                    audio_type))
       #browser()
-      get_sub_group_pages(sub_group, page_label, stimulus_url)
+      get_sub_group_pages(sub_group, page_label, stimulus_url, dict = dict, ...)
     }))
   #browser()
 
@@ -39,34 +39,54 @@ AAT <- function(label = "AAT",
     psychTestR::end_module()
   )
 }
-get_sub_group_labels <- function(sub_group, scale_length = 5){
-  if(sub_group %in% c("a", "b")){
+
+get_sub_group_labels <- function(sub_group, sub_scale, scale_length = 5){
+  if(sub_group %in% c("a", "b") && substr(sub_scale, 1, 1) == "M"){
     #bipolar
-    label_key <- sprintf("TGAR_SD%s_CHOICE%%01d", scale_length)
+    label_key <- sprintf("TGAR_AAT_SD%s_CHOICE%%01d", scale_length)
     sapply(1:scale_length, function(x) psychTestR::i18n(sprintf(label_key, x)), simplify = T, USE.NAMES = T)
   }
   else if(sub_group %in% c("b", "c")){
-    label_key <- sprintf("TGAR_L%s_CHOICE%%01d", scale_length)
+    #unipolar
+    label_key <- sprintf("TGAR_AAT_L%s_CHOICE%%01d", scale_length)
     sapply(1:scale_length, function(x) psychTestR::i18n(sprintf(label_key, x)), simplify = T, USE.NAMES = T)
-
   }
 }
-get_subgoup_pages <- function(sub_group, page_label, stimulus_url){
-  preamble_key <- sprintf("TGAR_ATT_PREAMBLE")
-  prompt_key <- sprintf("TGAR_ATT_PROMPT", questionnaire, num_rating_items)
-  label_key <- sprintf("TGAR_%s_CHOICE%%01d", response_scale)
 
-  psychTestR::new_timeline(
+get_sub_group_items <- function(sub_group, sub_scale, num_items){
+  if(sub_group %in% c("a", "d") || substr(sub_scale, 1, 1) == "M"){
+    #bipolar
+    label_key <- sprintf("TGAR_AAT_%s_%%04d_PROMPT", sub_scale)
+    ret <- sapply(1:num_items, function(x) psychTestR::i18n(sprintf(label_key, x)), simplify = T, USE.NAMES = T)
+  }
+  else if(sub_group %in% c("b", "c")){
+    label_key <- sprintf("TGAR_AAT_%s_%%04d_PROMPT", sub_scale)
+    ret <- sapply(1:num_items, function(x) psychTestR::i18n(sprintf(label_key, x)), simplify = T, USE.NAMES = T)
+  }
+  ret
+}
+
+get_sub_group_pages <- function(sub_group, page_label, stimulus_url, dict, ...){
+  bipolar_items_sets <- c("MG" = 24, "MI" = 6, "MA" = 8, "MV" = 5)
+  unipolar_items_sets <- c("AT" = 7, "PG" = 11)
+  preamble_key <- sprintf("TGAR_AAT_PREAMBLE")
+  scale_length <- 5
+  #item_key <- sprintf("TGAR_ATT_PROMPT_%%04d")
+  #label_key <- sprintf("TGAR_%s_CHOICE%%01d", response_scale)
+
+  MG <-
+    psychTestR::new_timeline(
     audio_radiobutton_matrix_page(label = page_label,
+                                  polarity = "bipolar",
                                   url = stimulus_url,
                                   instruction = psychTestR::i18n(preamble_key),
-                                  anchors = anchors,
-                                  header = TRUE,
+                                  anchors = FALSE,
+                                  header = "simple_num",
                                   reduce_labels = TRUE,
                                   style = AAT_style,
-                                  prompts = sapply(1:num_rating_items, function(x) psychTestR::i18n(sprintf(prompt_key, x)), simplify = T, USE.NAMES = T),
-                                  choices = 0:(scale_length-1),
-                                  labels = get_subgroup_labels(sub_group),
+                                  items = get_sub_group_items(sub_group, "MG", bipolar_items_sets["MG"]),
+                                  choices = 0:(scale_length - 1),
+                                  labels = get_sub_group_labels(sub_group, "MG", scale_length = scale_length),
                                   random_order = random_order,
                                   show_controls = TRUE,
                                   allow_download = FALSE,

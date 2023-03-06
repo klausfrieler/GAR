@@ -30,10 +30,12 @@ GAR <- function(label = "EMO1",
                 show_controls = TRUE,
                 allow_download = FALSE,
                 ...) {
-  #browser()
   quest <- get_questionnaires()
   if(!(questionnaire %in% quest$id)){
     stop(sprintf("Unknown questionnaire: %s", questionnaire))
+  }
+  if(questionnaire == "AAT"){
+    return(AAT(label, list(...)$sub_group))
   }
   num_rating_items <- max(1, min(num_rating_items, quest[quest$id == questionnaire,]$max_items))
   scale_length <- as.numeric(stringr::str_extract(response_scale, "[0-9]+"))
@@ -57,7 +59,7 @@ GAR <- function(label = "EMO1",
                                       header = header,
                                       reduce_labels = reduce_labels,
                                       style = style,
-                                      prompts = sapply(1:num_rating_items, function(x) psychTestR::i18n(sprintf(prompt_key, x)), simplify = T, USE.NAMES = T),
+                                      items = sapply(1:num_rating_items, function(x) psychTestR::i18n(sprintf(prompt_key, x)), simplify = T, USE.NAMES = T),
                                       choices = 0:(scale_length-1),
                                       labels = sapply(1:scale_length, function(x) psychTestR::i18n(sprintf(label_key, x)), simplify = T, USE.NAMES = T),
                                       random_order = random_order,
