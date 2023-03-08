@@ -20,8 +20,7 @@ GAR <- function(label = "EMO1",
                 anchors = FALSE,
                 header = "double",
                 reduce_labels = TRUE,
-                style = list(label_widths = list("100px", "100px"),
-                             div_style = "width:60%;margin-left:20%;margin-right:20%"),
+                style = default_style,
                 allow_na = TRUE,
                 audio_url = "https://s3.eu-west-1.amazonaws.com/media.gold-msi.org/test_materials/GAR/EMO1",
                 audio_type = "wav",
@@ -35,7 +34,7 @@ GAR <- function(label = "EMO1",
     stop(sprintf("Unknown questionnaire: %s", questionnaire))
   }
   if(questionnaire == "AAT"){
-    return(AAT(label, list(...)$sub_group))
+    return(AAT(label, allow_na = allow_na, audio_url = audio_url, audio_type = audio_type, random_order = random_order, list(...)$sub_group))
   }
   num_rating_items <- max(1, min(num_rating_items, quest[quest$id == questionnaire,]$max_items))
   scale_length <- as.numeric(stringr::str_extract(response_scale, "[0-9]+"))

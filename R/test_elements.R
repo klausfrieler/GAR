@@ -1,3 +1,16 @@
+default_style <-
+  list(
+    unipolar = list(row_id_style = "min-width:200px;white-space:normal;",
+                    label_widths = c(left = "0px",
+                                     right = "0px"),
+                    label_styles =  c(left = "",
+                                      right = "")),
+    bipolar = list(row_id_style = "width:0px;visibility:hidden",
+                   label_widths = c(left = "100px",
+                                    right = "100px"),
+                   label_syles = c(left = "text-align:left;min-width:100px",
+                                   right = "text-align:left;min-width:100px")),
+    div_style = "width:60%;margin-left:20%;margin-right:20%")
 #' New radio button matrix page
 #'
 #' Creates a  radio button matrix pag for n items with m Likert-type choices
@@ -45,8 +58,7 @@ radiobutton_matrix_page <- function(label,
                                     anchors = FALSE,
                                     header = c("double", "simple_str", "simple_num"),
                                     reduce_labels = TRUE,
-                                    style = list(label_widths = list("100px", "100px"),
-                                                 div_style = "width:60%;margin-left:20%;margin-right:20%"),
+                                    style = default_style,
                                     trigger_button_text = "Continue",
                                     allow_na = FALSE,
                                     failed_validation_message = "Answer missing!",
@@ -64,7 +76,6 @@ radiobutton_matrix_page <- function(label,
     is.character.or.numeric(choices),
     length(choices) > 0L
   )
-  browser()
   instruction_tag <- NULL
 
   if(!is.null(instruction)) {
@@ -86,7 +97,7 @@ radiobutton_matrix_page <- function(label,
   itemlist <- 1:length(items)
   names(itemlist) <- sprintf("item_%02d", 1:length(items))
   get_answer <- function(input, ...) {
-    #browser()
+    browser()
     values <- reactiveValuesToList(input)$radio_matrix
     answer <- purrr::map(values, function(x){
       if(!is.null(x[[1]])) as.numeric(x[[1]])
@@ -159,9 +170,7 @@ make_ui_radiobutton_matrix <- function(label,
                                        choices = 1:length(scale_labels),
                                        reduce_labels = TRUE,
                                        anchors = TRUE,
-                                       style = list(label_widths = list("100px", "100px"),
-                                                    item_width = "200px",
-                                                    div_style = "width:60%;margin-left:20%;margin-right:20%"),
+                                       style = default_style,
                                        header = c(
                                                   "simple_num",
                                                   "simple_str",
@@ -175,9 +184,6 @@ make_ui_radiobutton_matrix <- function(label,
   )
   polarity <- match.arg(polarity)
   header <- match.arg(header)
-  if(is.null(style$item_width)){
-    item_width <- "200px%"
-  }
   if (is.null(scale_labels)) {
     scale_labels <- if (is.null(names(choices)))
       choices
@@ -202,7 +208,8 @@ make_ui_radiobutton_matrix <- function(label,
   else if(header == "simple_str"){
     choiceNames <- scale_labels
   }
-  else {
+  else if(header == "double"){
+    #browser()
     if(polarity == "unipolar") {
       sub_labels <- 1:length(scale_labels)
     }
@@ -225,20 +232,29 @@ make_ui_radiobutton_matrix <- function(label,
     }
   }
   else{
-    browser()
     ssplit <- stringr::str_split_fixed(items, "_", 2)
-    # rowLLabels <- lapply(stringr::str_split_fixed(items, "_", 2), function(it) it[[1]]) %>% unlist()
-    # rowRLabels <- lapply(stringr::str_split_fixed(items, "_", 2), function(it) it[[2]]) %>% unlist()
     rowLLabels <- ssplit[, 1]
     rowRLabels <- ssplit[, 2]
   }
-  rowIDS_style <- c("unipolar" = "min-width:%s;white-space:normal;",
-                    "bipolar" = "width:0px; visibility:hidden")
+  SRM_label_styles <- list(
+    "unipolar" = list(
+      "left" = "text-align:left",
+      "right" = "text-align:left"),
+    "bipolar" = list(
+      "left" = sprintf("text-align:left;min-width:%s", style$bipolar_item_width_left),
+      "right" = sprintf("text-align:left;min-width:%s", style$bipolar_item_width_right))
+  )
+
+  #browser()
   rowIDs <- lapply(items, function(it){
-    shiny::div(it,
-               style = sprintf(rowIDS_style[polarity],style$item_width))
+      shiny::div(it, style = style[[polarity]]$row_id_style)
   })
-  browser()
+  # if(polarity == "unipolar"){
+  #   browser()
+  # }
+  # print(length((rowIDs)))
+  # print(length(unique(rowIDs)))
+  #browser()
   item_table <- shinyRadioMatrix::radioMatrixInput(inputId = "radio_matrix",
                                                    rowLLabels = rowLLabels,
                                                    rowRLabels = rowRLabels,
@@ -248,15 +264,16 @@ make_ui_radiobutton_matrix <- function(label,
                                                    choiceNames = choiceNames,
                                                    choiceValues = choices,
                                                    selected = NULL,
-                                                   labelsWidth = style$label_widths,
-                                                   LLabelStyle = "",
-                                                   RLabelStyle = "",
+                                                   labelsWidth = style[[polarity]]$label_widths,
+                                                   LLabelStyle = style[[polarity]]$label_styles[["left"]],
+                                                   RLabelStyle = style[[polarity]]$label_styles[["right"]],
                                                    choiceStyle = "",
                                                    LLabPos = 0,
                                                    RLabPos = length(reduced_labels) + 1)
   shiny::tags$div(id = id,
-                  style = style$div_style,
-                  item_table,
+                  shiny::tags$div(
+                    style = style$div_style,
+                    item_table),
                   psychTestR::trigger_button("next", trigger_button_text)
   )
 
@@ -309,8 +326,7 @@ audio_radiobutton_matrix_page <- function(label,
                                           labels = NULL,
                                           anchors = FALSE,
                                           header = "double",
-                                          style = list(label_widths = list("100px", "100px"),
-                                                       div_style = "width:60%;margin-left:20%;margin-right:20%"),
+                                          style = default_style,
                                           reduce_labels = TRUE,
                                           trigger_button_text = "Continue",
                                           allow_na = FALSE,
