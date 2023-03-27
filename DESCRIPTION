@@ -24,6 +24,6 @@ Imports:
 RdMacros:
     Rdpack
 Remotes:
-    pmcharrison/psychTestR
+    pmcharrison/psychTestR,
     klausfrieler/shinyRadioMatrix
 RoxygenNote: 7.1.1
