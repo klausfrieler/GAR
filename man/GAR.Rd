@@ -15,11 +15,10 @@ GAR(
   anchors = FALSE,
   header = "double",
   reduce_labels = TRUE,
-  style = list(label_widths = list("100px", "100px"), div_style =
-    "width:60\%;margin-left:20\%;margin-right:20\%"),
+  style = default_style,
   allow_na = TRUE,
- 
-    audio_url = "https://s3.eu-west-1.amazonaws.com/media.gold-msi.org/test_materials/GAR/EMO1",
+  audio_url =
+    "https://s3.eu-west-1.amazonaws.com/media.gold-msi.org/test_materials/GAR/EMO1",
   audio_type = "wav",
   dict = GAR::GAR_dict,
   random_order = FALSE,

@@ -6,15 +6,15 @@
 \usage{
 audio_radiobutton_matrix_page(
   label,
-  prompts,
+  polarity = c("unipolar", "bipolar"),
+  items,
   choices,
   url,
   instruction = "",
   labels = NULL,
   anchors = FALSE,
   header = "double",
-  style = list(label_widths = list("100px", "100px"), div_style =
-    "width:60\%;margin-left:20\%;margin-right:20\%"),
+  style = default_style,
   reduce_labels = TRUE,
   trigger_button_text = "Continue",
   allow_na = FALSE,
@@ -36,7 +36,7 @@ audio_radiobutton_matrix_page(
 \arguments{
 \item{label}{(Character scalar) Label for the current page.}
 
-\item{prompts}{(Character vector) Prompts to be displayed over the response
+\item{items}{(Character vector) Items to be displayed over the response
 choices}
 
 \item{choices}{(Character vector) Choices for the participant.

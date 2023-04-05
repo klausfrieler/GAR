@@ -43,14 +43,13 @@ GAR <- function(label = "EMO1",
   prompt_key <- sprintf("TGAR_%s_%%04d_PROMPT", questionnaire, num_rating_items)
   label_key <- sprintf("TGAR_%s_CHOICE%%01d", response_scale)
 
-  gar <- psychTestR::join(
+  gar <- psychTestR::new_timeline(
     lapply(1:num_stimuli, function(id){
       page_label <- sprintf("%s_%02d", label, id)
       stimulus_url <- file.path(audio_url, sprintf("%s.%s",
                                                    sprintf(items_prefix_pattern, id),
                                                    audio_type))
       #browser()
-      psychTestR::new_timeline(
         audio_radiobutton_matrix_page(label = page_label,
                                       url = stimulus_url,
                                       instruction = psychTestR::i18n(preamble_key),
@@ -65,9 +64,9 @@ GAR <- function(label = "EMO1",
                                       show_controls = show_controls,
                                       allow_download = allow_download,
                                       allow_na = allow_na,
-                                      ...),
-        dict = dict)
-    }))
+                                      ...)
+    }),
+    dict = dict)
   #browser()
 
   psychTestR::join(
@@ -76,4 +75,5 @@ GAR <- function(label = "EMO1",
                    # scoring
                    psychTestR::end_module()
                    )
+
 }

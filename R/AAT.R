@@ -41,16 +41,21 @@ AAT <- function(label = "AAT",
                                                    sprintf(items_prefix_pattern, id),
                                                    audio_type))
       #browser()
-      get_sub_group_pages(sub_group, page_label, stimulus_url, random_order, dict = dict, ...)
+      psychTestR::new_timeline(
+        get_sub_group_pages(sub_group, page_label, stimulus_url, random_order, dict = dict, ...)
+        , dict = dict)
     }))
   #browser()
 
-  psychTestR::join(
-    psychTestR::begin_module(label = label),
-    aat,
-    # scoring
-    psychTestR::end_module()
-  )
+  a <-
+    psychTestR::join(
+      psychTestR::begin_module(label = label),
+      aat[[1]],
+      # scoring
+      psychTestR::end_module()
+    )
+  print(class(a))
+  return(a)
 }
 
 bipolar_items_sets <- c("MG" = 24, "MI" = 8, "MA" = 6, "MV" = 5)
@@ -138,7 +143,7 @@ get_sub_group_pages <- function(sub_group, page_label, stimulus_url, random_orde
   #item_key <- sprintf("TGAR_ATT_PROMPT_%%04d")
   #label_key <- sprintf("TGAR_%s_CHOICE%%01d", response_scale)
   #browser()
-  bipolar <- psychTestR::new_timeline(
+  bipolar <- psychTestR::join(
     lapply(c("M"), function(item_set)
     audio_radiobutton_matrix_page(label = sprintf("%s_%s", page_label, item_set),
                                   polarity = "bipolar",
@@ -156,9 +161,8 @@ get_sub_group_pages <- function(sub_group, page_label, stimulus_url, random_orde
                                   show_controls = TRUE,
                                   allow_download = FALSE,
                                   allow_na = TRUE,
-                                  ...)),
-    dict = dict)
-  unipolar <- psychTestR::new_timeline(
+                                  ...)))
+  unipolar <- psychTestR::join(
     lapply(names(unipolar_items_sets), function(item_set){
       audio_radiobutton_matrix_page(label = sprintf("%s_%s", page_label, item_set),
                                     polarity = "unipolar",
@@ -177,8 +181,7 @@ get_sub_group_pages <- function(sub_group, page_label, stimulus_url, random_orde
                                     allow_download = FALSE,
                                     allow_na = TRUE,
                                     ...)
-      }),
-    dict = dict)
-
+      }))
+  #browser()
   psychTestR::join(bipolar, unipolar)
 }

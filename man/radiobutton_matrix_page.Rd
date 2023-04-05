@@ -6,15 +6,15 @@
 \usage{
 radiobutton_matrix_page(
   label,
-  prompts,
+  polarity = c("unipolar", "bipolar"),
+  items,
   choices,
   instruction = NULL,
   labels = NULL,
   anchors = FALSE,
-  header = "double",
+  header = c("double", "simple_str", "simple_num"),
   reduce_labels = TRUE,
-  style = list(label_widths = list("100px", "100px"), div_style =
-    "width:60\%;margin-left:20\%;margin-right:20\%"),
+  style = default_style,
   trigger_button_text = "Continue",
   allow_na = FALSE,
   failed_validation_message = "Answer missing!",
@@ -29,7 +29,7 @@ radiobutton_matrix_page(
 \arguments{
 \item{label}{(Character scalar) Label for the current page.}
 
-\item{prompts}{(Character vector) Prompts to be displayed over the response
+\item{items}{(Character vector) Items to be displayed over the response
 choices}
 
 \item{choices}{(Character vector) Choices for the participant.
@@ -68,6 +68,9 @@ and any of:
 \code{opt}, the test's option list as created by \code{test_options()}.}
 
 \item{admin_ui}{Optional UI component for the admin panel.}
+
+\item{prompts}{(Character vector) Prompts to be displayed over the response
+choices}
 }
 \description{
 Creates a  radio button matrix pag for n items with m Likert-type choices

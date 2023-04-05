@@ -6,13 +6,13 @@
 \usage{
 make_ui_radiobutton_matrix(
   label,
+  polarity = c("unipolar", "bipolar"),
   items = NULL,
   scale_labels = NULL,
   choices = 1:length(scale_labels),
   reduce_labels = TRUE,
   anchors = TRUE,
-  style = list(label_widths = list("100px", "100px"), item_width = "200px", div_style =
-    "width:60\%;margin-left:20\%;margin-right:20\%"),
+  style = default_style,
   header = c("simple_num", "simple_str", "double"),
   trigger_button_text = "Continue",
   hide = FALSE,
@@ -22,7 +22,7 @@ make_ui_radiobutton_matrix(
 \arguments{
 \item{label}{(Character scalar) Label for the current page.}
 
-\item{items}{(Character vector) Prompts to be displayed over the response
+\item{items}{(Character vector) Items to be displayed over the response
 choices}
 
 \item{scale_labels}{Optional vector of labels for the radio button choices.
