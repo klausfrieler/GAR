@@ -81,6 +81,11 @@ radiobutton_matrix_page <- function(label,
   if(!is.null(instruction)) {
     instruction_tag <- tagify(instruction)
   }
+  item_order <- 1:length(items)
+  if(random_order){
+    item_order <- sample(1:length(items))
+    items <- items[item_order]
+  }
   ui <- shiny::tags$div(instruction_tag,
                         make_ui_radiobutton_matrix(label,
                                                    polarity = polarity,
@@ -105,7 +110,7 @@ radiobutton_matrix_page <- function(label,
     }) %>% unlist()
     #names(answer) <- stringr::str_remove_all(stringr::str_replace_all(tolower(names(answer)), " ", "_"), "[.]")
 
-    names(answer) <- sprintf("%s.q%d", label, 1:length(values))
+    names(answer) <- sprintf("%s.q%d", label, item_order)
     print(answer)
     answer
 
@@ -171,8 +176,7 @@ make_ui_radiobutton_matrix <- function(label,
                                        reduce_labels = TRUE,
                                        anchors = TRUE,
                                        style = default_style,
-                                       header = c(
-                                                  "simple_num",
+                                       header = c("simple_num",
                                                   "simple_str",
                                                   "double"),
                                        trigger_button_text = "Continue",
