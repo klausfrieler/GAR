@@ -29,7 +29,7 @@ GAR <- function(label = "EMO1",
                 show_controls = TRUE,
                 allow_download = FALSE,
                 ...) {
-  browser()
+  #browser()
   quest <- get_questionnaires()
   if(!(questionnaire %in% quest$id)){
     stop(sprintf("Unknown questionnaire: %s", questionnaire))

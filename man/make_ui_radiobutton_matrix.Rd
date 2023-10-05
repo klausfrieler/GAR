@@ -20,7 +20,9 @@ make_ui_radiobutton_matrix(
 )
 }
 \arguments{
-\item{label}{(Character scalar) Label for the current page.}
+\item{label}{(character scalar) Label for the buttong matrix}
+
+\item{polarity}{("unipolar" or "bipolar") Determines whether scale will be unipolar (one label) or bipolar (two labels)}
 
 \item{items}{(Character vector) Items to be displayed over the response
 choices}
@@ -36,14 +38,20 @@ button labels.
 If named, then values will be used for button IDs and names
 will be used for button labels.}
 
+\item{reduce_labels}{(boolean) Shall a only the endpoints of choice labels being labelled?}
+
+\item{anchors}{(boolean)  Only for unipolar items: show scale labels?}
+
+\item{style}{(character scalar) CSS string for the radiobuttons}
+
+\item{header}{(character scale) One of simple_num, simple_str or double. simple_num only displays numbers in the header, simple_str uses verbal labels given in parameter choices, double used both.}
+
 \item{trigger_button_text}{(Character scalar) Text for the trigger button.}
 
 \item{hide}{(Boolean scalar) Whether to begin with the response
 interface hidden (it can be subsequently made visible through Javascript,
 using the element ID as set in \code{response_ui_id}.
 See \link[psychTestR]{audio_NAFC_page} for an example.).}
-
-\item{id}{(character scalar) ID for the response ui}
 }
 \description{
 Creates a  radio button matrix pag for n items with m Likert-type choices

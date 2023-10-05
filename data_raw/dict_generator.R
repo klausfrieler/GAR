@@ -9,6 +9,10 @@ GAR_dict_raw_AAT <- read.csv(fileEncoding = "UTF8",
                             stringsAsFactors = FALSE,
                             header = TRUE) %>% as_tibble()
 
-GAR_dict <- psychTestR::i18n_dict$new(bind_rows(GAR_dict_raw, GAR_dict_raw_AAT) %>% distinct())
+GAR_dict <- psychTestR::i18n_dict$new(
+  bind_rows(GAR_dict_raw,
+            GAR_dict_raw_AAT) %>%
+    distinct() %>%
+    mutate(across(where(is.character), trimws)))
 
 usethis::use_data(GAR_dict, overwrite = TRUE)

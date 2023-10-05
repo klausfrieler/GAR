@@ -34,6 +34,14 @@ GAR_standalone(
 \arguments{
 \item{label}{(Character scalar) Label for the current page.}
 
+\item{anchors}{(boolean)  Only for unipolar items: show scale labels?}
+
+\item{header}{(character scale) One of simple_num, simple_str or double. simple_num only displays numbers in the header, simple_str uses verbal labels given in parameter choices, double used both.}
+
+\item{reduce_labels}{(boolean) Shall a only the endpoints of choice labels being labelled?}
+
+\item{style}{(character scalar) CSS string for the radiobuttons}
+
 \item{show_controls}{Whether or not to show audio controls to the
 participant, so that they can control audio playback.}
 

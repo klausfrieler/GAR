@@ -29,6 +29,8 @@ radiobutton_matrix_page(
 \arguments{
 \item{label}{(Character scalar) Label for the current page.}
 
+\item{polarity}{("unipolar" or "bipolar") Determines whether scale will be unipolar (one label) or bipolar (two labels)}
+
 \item{items}{(Character vector) Items to be displayed over the response
 choices}
 
@@ -42,6 +44,14 @@ will be used for button labels.}
 If not \code{NULL}, will overwrite the names of \code{choices}.
 This vector of labels can either be a character vector
 or a list of Shiny tag objects, e.g. as created by \code{shiny::HTML()}.}
+
+\item{anchors}{(boolean)  Only for unipolar items: show scale labels?}
+
+\item{header}{(character scale) One of simple_num, simple_str or double. simple_num only displays numbers in the header, simple_str uses verbal labels given in parameter choices, double used both.}
+
+\item{reduce_labels}{(boolean) Shall a only the endpoints of choice labels being labelled?}
+
+\item{style}{(character scalar) CSS string for the radiobuttons}
 
 \item{trigger_button_text}{(Character scalar) Text for the trigger button.}
 

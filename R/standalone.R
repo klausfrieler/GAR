@@ -61,9 +61,9 @@ GAR_standalone <- function(label = "EMO1",
                                       psychTestR::i18n("CLOSE_BROWSER"))),
       dict = dict)
     )
-  title <- unlist(setNames(
+  title <- unlist(rlang::set_names(
     purrr::map(GAR::languages(), function(x)
-      GAR_dict$translate(sprintf("TGAR_%s_TITLE", questionnaire), x)),
+      GAR::GAR_dict$translate(sprintf("TGAR_%s_TITLE", questionnaire), x)),
     GAR::languages()
   ))
   psychTestR::make_test(elts,

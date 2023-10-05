@@ -39,3 +39,9 @@ NULL
 
 #' @importFrom stringr "str_extract"
 NULL
+
+#' @importFrom stringr "str_split_fixed"
+NULL
+
+#' @importFrom stringr "str_remove_all"
+NULL

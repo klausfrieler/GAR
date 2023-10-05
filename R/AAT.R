@@ -16,8 +16,13 @@ AAT_style <-
 #'
 #' This function defines module for #'
 #' @inheritParams audio_radiobutton_matrix_page
-#'
-#'
+#' @param sub_group (character scalar, "a", "b", "c" or "d") One of four subgroups (bipolar/unipolar, switched labels)
+#' @param item_prefix_pattern (format string) Used for identifiying items using audio_url and audio_type
+#' @param num_stimuli (integer) Probably ignored
+#' @param audio_url (URL) Where are the stimuli?
+#' @param audio_type (character scalar) Audio type of stimuli (as file extension)
+#' @param allow_na (boolean)  Currently ignored
+#' @param dict (psychTestR dictionary object) You really want another dictionary?
 #' @export
 AAT <- function(label = "AAT",
                 sub_group = "a",
@@ -31,7 +36,7 @@ AAT <- function(label = "AAT",
                 ...) {
   #browser()
   if(!(sub_group %in% letters[1:4])){
-    stop(sprintf("Unknown subgroup: %s", questionnaire))
+    stop(sprintf("Unknown subgroup: %s", sub_group))
   }
 
   aat <- psychTestR::join(
@@ -54,15 +59,17 @@ AAT <- function(label = "AAT",
       # scoring
       psychTestR::end_module()
     )
-  print(class(a))
+  #print(class(a))
   return(a)
 }
 
 bipolar_items_sets <- c("MG" = 24, "MI" = 8, "MA" = 6, "MV" = 5)
 unipolar_items_sets <- c("AT" = 7, "PG" = 11)
 
-item_sets <- list("bipolar" = bipolar_items_sets, "unipolar" = unipolar_items_sets)
-all_num_items <- c(bipolar_items_sets, unipolar_items_sets)
+item_sets <- list("bipolar" = bipolar_items_sets,
+                  "unipolar" = unipolar_items_sets)
+all_num_items <- c(bipolar_items_sets,
+                   unipolar_items_sets)
 
 get_sub_group_labels <- function(sub_group, sub_scale, scale_length = 5){
   if(length(sub_scale) > 1){
@@ -98,7 +105,9 @@ get_sub_group_items <- function(sub_group, sub_scale, num_items){
   if(length(sub_scale) > 1){
     #browser()
     stopifnot(length(sub_scale) == length(num_items))
-    ret <- sapply(sub_scale, function(ssc) get_sub_group_items(sub_group, ssc, num_items[[ssc]]), simplify = T, USE.NAMES = F)
+    ret <- sapply(sub_scale,
+                  function(ssc) get_sub_group_items(sub_group, ssc, num_items[[ssc]]),
+                  simplify = T, USE.NAMES = F)
     return(unlist(ret))
   }
   type <- "bipolar"

@@ -102,8 +102,8 @@ radiobutton_matrix_page <- function(label,
   itemlist <- 1:length(items)
   names(itemlist) <- sprintf("item_%02d", 1:length(items))
   get_answer <- function(input, ...) {
-    browser()
-    values <- reactiveValuesToList(input)$radio_matrix
+    #browser()
+    values <-shiny:: reactiveValuesToList(input)$radio_matrix
     answer <- purrr::map(values, function(x){
       if(!is.null(x[[1]])) as.numeric(x[[1]])
          else NA
@@ -163,8 +163,12 @@ radiobutton_matrix_page <- function(label,
 #' using the element ID as set in \code{response_ui_id}.
 #' See \link[psychTestR]{audio_NAFC_page} for an example.).
 #'
-#' @param id (character scalar) ID for the response ui
-#'
+#' @param label (character scalar) Label for the buttong matrix
+#' @param polarity ("unipolar" or "bipolar") Determines whether scale will be unipolar (one label) or bipolar (two labels)
+#' @param reduce_labels (boolean) Shall a only the endpoints of choice labels being labelled?
+#' @param anchors (boolean)  Only for unipolar items: show scale labels?
+#' @param style (character scalar) CSS string for the radiobuttons
+#' @param header (character scale) One of simple_num, simple_str or double. simple_num only displays numbers in the header, simple_str uses verbal labels given in parameter choices, double used both.
 #' @inheritParams psychTestR::page
 #'
 #' @export

@@ -54,9 +54,10 @@ tdGenerateOptions <- function (inputId, selected, inline, type = "checkbox",
   shiny::span(class = "shiny-options-group", options)
 }
 
+
 tdRadioButtons <- function (inputId, label, choices = NULL, selected = NULL, inline = FALSE,
                              width = NULL, choiceNames = NULL, choiceValues = NULL){
-  args <- shiny:::normalizeChoicesArgs(choices, choiceNames, choiceValues)
+  args <- shiny:::normalizeChoiceArgs(choices, choiceNames, choiceValues)
   selected <- shiny::restoreInput(id = inputId, default = selected)
   selected <- if (is.null(selected))
     args$choiceValues[[1]]

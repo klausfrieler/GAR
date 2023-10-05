@@ -20,6 +20,20 @@ AAT(
 }
 \arguments{
 \item{label}{(Character scalar) Label for the current page.}
+
+\item{sub_group}{(character scalar, "a", "b", "c" or "d") One of four subgroups (bipolar/unipolar, switched labels)}
+
+\item{num_stimuli}{(integer) Probably ignored}
+
+\item{audio_url}{(URL) Where are the stimuli?}
+
+\item{audio_type}{(character scalar) Audio type of stimuli (as file extension)}
+
+\item{allow_na}{(boolean)  Currently ignored}
+
+\item{dict}{(psychTestR dictionary object) You really want another dictionary?}
+
+\item{item_prefix_pattern}{(format string) Used for identifiying items using audio_url and audio_type}
 }
 \description{
 This function defines module for #'

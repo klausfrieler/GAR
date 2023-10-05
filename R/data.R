@@ -1,6 +1,6 @@
-#' groovescale dictionary
+#' GAR dictionary
 #'
 #' The default internationalisation dictionary
-#' @name groovescale_dict
+#' @name GAR_dict
 #' @docType data
 NULL
