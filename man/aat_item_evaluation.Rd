@@ -9,6 +9,7 @@ aat_item_evaluation(
   scale_length = 5,
   nested = F,
   dict = GAR::GAR_dict,
+  max_items = 43,
   ...
 )
 }
@@ -20,6 +21,8 @@ aat_item_evaluation(
 \item{nested}{(boolean) Asked two question per item all questions per item?}
 
 \item{dict}{(psychTestR dictionary object) You really want another dictionary?}
+
+\item{max_items}{(integer) For debugging, only use max_items (max 43)}
 }
 \description{
 This function defines module for aat_item_evaluation

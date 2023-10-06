@@ -4,18 +4,20 @@
 #' @param label (character scale) Label for the whole shit
 #' @param scale_length (integer scalar) Length of agreement scale to be used (5 or 7)
 #' @param nested (boolean) Asked two question per item all questions per item?
+#' @param max_items (integer) For debugging, only use max_items (max 43)
 #' @param dict (psychTestR dictionary object) You really want another dictionary?
 #' @export
 aat_item_evaluation <- function(label = "AAT_EVAL",
                                 scale_length = 5,
                                 nested = F,
                                 dict = GAR::GAR_dict,
-                ...) {
+                                max_items = 43,
+                                ...) {
   items <- GAR_dict %>%
     as.data.frame() %>%
     filter(stringr::str_detect(key, "TGAR_AAT_M")) %>%
     pull(key)
-  items <- items[1:5]
+  items <- items[1:max(min(max_items, 43), 1)]
   if(nested){
     pages <- psychTestR::join(
       lapply(items, function(ik)
@@ -46,7 +48,7 @@ aat_item_evaluation <- function(label = "AAT_EVAL",
 make_aat_item_eval_pages <- function(item_key, dict = GAR::GAR_dict, scale_length = 5, pages = 1:2){
   #browser()
   sep <- "..."
-  page_label <- sprintf(str_remove(item_key, "TGAR_AAT_") %>% str_remove("_PROMPT"))
+  page_label <- sprintf(stringr::str_remove(item_key, "TGAR_AAT_") %>% str_remove("_PROMPT"))
   label_keys <- sprintf("TGAR_AAT_L%s_CHOICE%%01d", scale_length)
   choices <- as.character(1:scale_length)
   button_style <- sprintf("min-width:%dpx", ifelse(scale_length == 7, 250, 0))
@@ -74,8 +76,8 @@ make_aat_item_eval_pages <- function(item_key, dict = GAR::GAR_dict, scale_lengt
   psychTestR::join(page_list[pages])
 }
 
-test_aat_item_eval_pages <- function(scale_length = 5){
-  aat_items <- aat_item_evaluation(nested = T, scale_length = scale_length)
+test_aat_item_eval_pages <- function(scale_length = 5, nested = F){
+  aat_items <- aat_item_evaluation(nested = nested, scale_length = scale_length)
   elts <- psychTestR::join(aat_items,
                            psychTestR::code_block(function(state, ...){
                              res <- psychTestR::get_results(state, complete = T)

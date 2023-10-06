@@ -1,7 +1,7 @@
 Package: GAR
 Type: Package
 Title: General Audio Rating module (psychTestR implementation)
-Version: 0.9.2
+Version: 0.9.3
 Author: Klaus Frieler
 Maintainer: Klaus Frieler <klaus.frieler@ae.mpg.de>
 Description: Container and utils for simple audio rating questionnaires using radiobutton matrices.

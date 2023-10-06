@@ -43,5 +43,8 @@ NULL
 #' @importFrom stringr "str_split_fixed"
 NULL
 
+#' @importFrom stringr "str_remove"
+NULL
+
 #' @importFrom stringr "str_remove_all"
 NULL
