@@ -21,7 +21,7 @@ aat_item_evaluation <- function(label = "AAT_EVAL",
     pull(key)
 
   items <- items[1:max(min(max_items, 43), 1)]
-  style <- "text-align:left;width:60%;margin-left:20%;margin-right:20%"
+  style <- "text-align:left;width:60%;margin-left:20%;margin-right:20%;margin-top:6pt;margin-bottom:6pt;"
 
   overall_intro_page <- psychTestR::new_timeline(
     psychTestR::one_button_page(
@@ -88,7 +88,8 @@ make_aat_item_eval_pages <- function(item_key, dict = GAR::GAR_dict, scale_lengt
                                   prompt = shiny::p(
                                     shiny::h3(shiny::tags$b(
                                       stringr::str_replace(psychTestR::i18n(item_key), "_", sep))),
-                                  shiny::h4(psychTestR::i18n("TGAR_AAT_EV1_PREAMBLE_SINGLE"))),
+                                  shiny::h4(psychTestR::i18n("TGAR_AAT_EV1_PREAMBLE_SINGLE"),
+                                            style = "margin-top:1em;margin-bottom:1em;")),
                                   choices = choices,
                                   labels = sapply(1:scale_length, function(x) psychTestR::i18n(sprintf(label_keys, x)), simplify = T, USE.NAMES = T),
                                   save_answer = T,
@@ -96,9 +97,9 @@ make_aat_item_eval_pages <- function(item_key, dict = GAR::GAR_dict, scale_lengt
                                   arrange_vertically = scale_length > 5)
   page2 <-  psychTestR::NAFC_page(label = sprintf("%s_2", page_label),
                                   prompt = shiny::p(
-                                    shiny::h3(shiny::tags$b(
-                                      stringr::str_replace(psychTestR::i18n(item_key), "_", sep))),
-                                  shiny::h4(psychTestR::i18n("TGAR_AAT_EV2_PREAMBLE_SINGLE"))),
+                                    shiny::h3(shiny::tags$b(stringr::str_replace(psychTestR::i18n(item_key), "_", sep))),
+                                  shiny::h4(psychTestR::i18n("TGAR_AAT_EV2_PREAMBLE_SINGLE"),
+                                            style = "margin-top:1em;margin-bottom:1em;")),
                                   choices = choices,
                                   labels = sapply(1:scale_length, function(x) psychTestR::i18n(sprintf(label_keys, x)), simplify = T, USE.NAMES = T),
                                   save_answer = T,
