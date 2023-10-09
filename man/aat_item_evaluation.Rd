@@ -10,6 +10,8 @@ aat_item_evaluation(
   nested = F,
   dict = GAR::GAR_dict,
   max_items = 43,
+  with_intro = T,
+  sep = " ... ",
   ...
 )
 }
