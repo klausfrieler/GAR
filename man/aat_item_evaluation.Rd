@@ -5,7 +5,7 @@
 \title{Audio Attention Study Modules}
 \usage{
 aat_item_evaluation(
-  label = "AAT_EVAL",
+  label = "AAT_ITEM_EVAL",
   scale_length = 5,
   nested = F,
   dict = GAR::GAR_dict,

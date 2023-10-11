@@ -7,7 +7,7 @@
 #' @param max_items (integer) For debugging, only use max_items (max 43)
 #' @param dict (psychTestR dictionary object) You really want another dictionary?
 #' @export
-aat_item_evaluation <- function(label = "AAT_EVAL",
+aat_item_evaluation <- function(label = "AAT_ITEM_EVAL",
                                 scale_length = 5,
                                 nested = F,
                                 dict = GAR::GAR_dict,
@@ -21,29 +21,30 @@ aat_item_evaluation <- function(label = "AAT_EVAL",
     pull(key)
 
   items <- items[1:max(min(max_items, 43), 1)]
-  style <- "text-align:left;width:60%;margin-left:20%;margin-right:20%;margin-top:6pt;margin-bottom:6pt;"
+  style_block <- "text-align:left;width:40%;margin-left:30%;margin-right:30%;margin-top:1em;margin-bottom:1em;"
+  style_single <- "text-align:center;width:60%;margin-left:20%;margin-right:20%;margin-top:1em;margin-bottom:1em;"
 
   overall_intro_page <- psychTestR::new_timeline(
     psychTestR::one_button_page(
-    body = shiny::p(
+    body = shiny::h4(
       psychTestR::i18n("TGAR_ITEM_EVAL_INTRO", sub = list(num_pairs = max_items)),
-      style = style),
+      style = style_block),
     button_text = psychTestR::i18n("CONTINUE")),
     dict = GAR::GAR_dict)
 
   opposite_intro_page <- psychTestR::new_timeline(
     psychTestR::one_button_page(
-    body = shiny::p(
+    body = shiny::h4(
       psychTestR::i18n("TGAR_ITEM_EV1_INTRO"),
-      style = style),
+      style = style_block),
     button_text = psychTestR::i18n("CONTINUE")),
     dict = GAR::GAR_dict)
 
   suitability_intro_page <- psychTestR::new_timeline(
     psychTestR::one_button_page(
-    body = shiny::p(
+    body = shiny::h4(
       psychTestR::i18n("TGAR_ITEM_EV2_INTRO"),
-      style = style),
+      style = style_block),
     button_text = psychTestR::i18n("CONTINUE")),
     dict = GAR::GAR_dict)
 

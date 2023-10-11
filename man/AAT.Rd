@@ -7,11 +7,11 @@
 AAT(
   label = "AAT",
   sub_group = "a",
-  items_prefix_pattern = "s\%02d",
+  items_prefix_pattern = "s\%03d",
   num_stimuli = 1,
   random_order = FALSE,
-  audio_url =
-    "https://s3.eu-west-1.amazonaws.com/media.gold-msi.org/test_materials/GAR/EMO1",
+  with_module = F,
+  audio_url = "https://s3.eu-west-1.amazonaws.com/media.dots.org/stimuli/AAT",
   audio_type = "wav",
   allow_na = TRUE,
   dict = GAR::GAR_dict,
@@ -21,19 +21,32 @@ AAT(
 \arguments{
 \item{label}{(Character scalar) Label for the current page.}
 
-\item{sub_group}{(character scalar, "a", "b", "c" or "d") One of four subgroups (bipolar/unipolar, switched labels)}
+\item{sub_group}{(character scalar, "a", "b", "c" or "d")
+One of four subgroups (bipolar/unipolar, switched labels)}
 
-\item{num_stimuli}{(integer) Probably ignored}
+\item{num_stimuli}{(integer)
+Number of stimuli}
 
-\item{audio_url}{(URL) Where are the stimuli?}
+\item{random_order}{(boolean)
+Randomize items (not stimuli!)}
 
-\item{audio_type}{(character scalar) Audio type of stimuli (as file extension)}
+\item{with_module}{(boolean)
+Wrap AAt into module.}
 
-\item{allow_na}{(boolean)  Currently ignored}
+\item{audio_url}{(URL)
+Where are the stimuli?}
 
-\item{dict}{(psychTestR dictionary object) You really want another dictionary?}
+\item{audio_type}{(character scalar)
+Audio type of stimuli (as file extension)}
 
-\item{item_prefix_pattern}{(format string) Used for identifiying items using audio_url and audio_type}
+\item{allow_na}{(boolean)
+Currently ignored}
+
+\item{dict}{(psychTestR dictionary object)
+You really want another dictionary?}
+
+\item{item_prefix_pattern}{(format string)
+Used for identifying items using audio_url and audio_type}
 }
 \description{
 This function defines module for #'

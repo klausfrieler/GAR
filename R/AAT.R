@@ -16,20 +16,32 @@ AAT_style <-
 #'
 #' This function defines module for #'
 #' @inheritParams audio_radiobutton_matrix_page
-#' @param sub_group (character scalar, "a", "b", "c" or "d") One of four subgroups (bipolar/unipolar, switched labels)
-#' @param item_prefix_pattern (format string) Used for identifiying items using audio_url and audio_type
-#' @param num_stimuli (integer) Probably ignored
-#' @param audio_url (URL) Where are the stimuli?
-#' @param audio_type (character scalar) Audio type of stimuli (as file extension)
-#' @param allow_na (boolean)  Currently ignored
-#' @param dict (psychTestR dictionary object) You really want another dictionary?
+#' @param sub_group (character scalar, "a", "b", "c" or "d")
+#' One of four subgroups (bipolar/unipolar, switched labels)
+#' @param item_prefix_pattern (format string)
+#' Used for identifying items using audio_url and audio_type
+#' @param num_stimuli (integer)
+#' Number of stimuli
+#' @param random_order (boolean)
+#' Randomize items (not stimuli!)
+#' @param with_module (boolean)
+#' Wrap AAt into module.
+#' @param audio_url (URL)
+#' Where are the stimuli?
+#' @param audio_type (character scalar)
+#' Audio type of stimuli (as file extension)
+#' @param allow_na (boolean)
+#' Currently ignored
+#' @param dict (psychTestR dictionary object)
+#' You really want another dictionary?
 #' @export
 AAT <- function(label = "AAT",
                 sub_group = "a",
-                items_prefix_pattern = "s%02d",
+                items_prefix_pattern = "s%03d",
                 num_stimuli = 1,
                 random_order = FALSE,
-                audio_url = "https://s3.eu-west-1.amazonaws.com/media.gold-msi.org/test_materials/GAR/EMO1",
+                with_module = F,
+                audio_url = "https://s3.eu-west-1.amazonaws.com/media.dots.org/stimuli/AAT",
                 audio_type = "wav",
                 allow_na = TRUE,
                 dict = GAR::GAR_dict,
@@ -39,25 +51,25 @@ AAT <- function(label = "AAT",
     stop(sprintf("Unknown subgroup: %s", sub_group))
   }
 
-  aat <- psychTestR::join(
+  aat <-  psychTestR::join(
     lapply(1:num_stimuli, function(id){
-      page_label <- sprintf("%s_%02d", label, id)
+      page_label <- sprintf("%s_%03d", label, id)
       stimulus_url <- file.path(audio_url, sprintf("%s.%s",
                                                    sprintf(items_prefix_pattern, id),
                                                    audio_type))
       #browser()
       psychTestR::new_timeline(
-        get_sub_group_pages(sub_group, page_label, stimulus_url, random_order, dict = dict, ...)
-        , dict = dict)
-    }))
-  #browser()
+        get_sub_group_pages(sub_group, page_label, stimulus_url, random_order, id, num_stimuli, ...),
+        dict = dict)
+      }))
 
+  aat <- do.call(psychTestR::join, aat)
   a <-
     psychTestR::join(
-      psychTestR::begin_module(label = label),
-      aat[[1]],
+      if(with_module)psychTestR::begin_module(label = label),
+        aat,
       # scoring
-      psychTestR::end_module()
+      if(with_module)psychTestR::end_module()
     )
   #print(class(a))
   return(a)
@@ -146,7 +158,7 @@ get_sub_group_items <- function(sub_group, sub_scale, num_items){
   ret
 }
 
-get_sub_group_pages <- function(sub_group, page_label, stimulus_url, random_order, dict, ...){
+get_sub_group_pages <- function(sub_group, page_label, stimulus_url, random_order, item_id, num_stimuli, ...){
   preamble_key <- sprintf("TGAR_AAT_PREAMBLE")
   scale_length <- 7
   #item_key <- sprintf("TGAR_ATT_PROMPT_%%04d")
@@ -157,7 +169,8 @@ get_sub_group_pages <- function(sub_group, page_label, stimulus_url, random_orde
     audio_radiobutton_matrix_page(label = sprintf("%s_%s", page_label, item_set),
                                   polarity = "bipolar",
                                   url = stimulus_url,
-                                  instruction = psychTestR::i18n(preamble_key),
+                                  instruction = shiny::p(shiny::h4(psychTestR::i18n("TGAR_AAT_ITEM_HEADER", sub = list(item_id = item_id, num_stimuli = num_stimuli))),
+                                    psychTestR::i18n(preamble_key)),
                                   anchors = FALSE,
                                   header = "simple_str",
                                   reduce_labels = FALSE,
