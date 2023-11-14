@@ -81,8 +81,9 @@ aat_item_evaluation <- function(label = "AAT_ITEM_EVAL",
 
 make_aat_item_eval_pages <- function(item_key, dict = GAR::GAR_dict, scale_length = 5, pages = 1:2, sep = " ... "){
   #browser()
+  scale_length <- 5
   page_label <- sprintf(stringr::str_remove(item_key, "TGAR_AAT_") %>% str_remove("_PROMPT"))
-  label_keys <- sprintf("TGAR_AAT_L%s_CHOICE%%01d", scale_length)
+  label_keys <- sprintf("TGAR_AAT_IE%s_CHOICE%%01d", scale_length)
   choices <- as.character(1:scale_length)
   button_style <- sprintf("min-width:%dpx", ifelse(scale_length == 7, 250, 0))
   page1 <-  psychTestR::NAFC_page(label = sprintf("%s_1", page_label),
