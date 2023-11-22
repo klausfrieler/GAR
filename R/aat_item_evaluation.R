@@ -121,8 +121,8 @@ test_aat_item_eval_pages <- function(scale_length = 5, nested = F){
                            psychTestR::new_timeline(
                              psychTestR::final_page(psychTestR::i18n("CLOSE_BROWSER")), dict = GAR::GAR_dict))
   psychTestR::make_test(elts,
-                        opt = psychTestR::test_options(title = c("en" = "Title", "de" = "Titel"),
+                        opt = psychTestR::test_options(title = c("en" = "Title", "de_f" = "Titel"),
                                                        admin_password = "admin_password",
                                                        researcher_email = "researcher_email",
-                                                       languages = c("de")))
+                                                       languages = c("de_f")))
 }
