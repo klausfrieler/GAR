@@ -7,5 +7,5 @@
 get_questionnaires()
 }
 \description{
-Lists the available questionnairs.
+Lists the available questionnaires.
 }

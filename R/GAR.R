@@ -15,6 +15,7 @@ GAR <- function(label = "EMO1",
                 questionnaire = "EMO1",
                 response_scale = "L7",
                 items_prefix_pattern = "s%02d",
+                item_order = NULL,
                 num_stimuli = 10,
                 num_rating_items = 6,
                 anchors = FALSE,
@@ -26,6 +27,7 @@ GAR <- function(label = "EMO1",
                 audio_type = "wav",
                 dict = GAR::GAR_dict,
                 random_order = FALSE,
+                randomize_stimuli = FALSE,
                 show_controls = TRUE,
                 allow_download = FALSE,
                 ...) {
@@ -49,38 +51,53 @@ GAR <- function(label = "EMO1",
   preamble_key <- sprintf("TGAR_%s_PREAMBLE", questionnaire)
   prompt_key <- sprintf("TGAR_%s_%%04d_PROMPT", questionnaire, num_rating_items)
   label_key <- sprintf("TGAR_%s_CHOICE%%01d", response_scale)
-
-  gar <- psychTestR::new_timeline(
+  #browser()
+  if(!is.null(item_order)){
+    stopifnot(length(item_order) == num_stimuli)
+  }
+  gar_pages <-
     lapply(1:num_stimuli, function(id){
       page_label <- sprintf("%s_%02d", label, id)
-      stimulus_url <- file.path(audio_url, sprintf("%s.%s",
-                                                   sprintf(items_prefix_pattern, id),
-                                                   audio_type))
+      if(!is.null(item_order)){
+        stimulus_url <- file.path(audio_url, sprintf("%s.%s",
+                                                     item_order[id],
+                                                     audio_type))
+      }
+      else{
+        stimulus_url <- file.path(audio_url, sprintf("%s.%s",
+                                                     sprintf(items_prefix_pattern, id),
+                                                     audio_type))
+      }
       #browser()
-        audio_radiobutton_matrix_page(label = page_label,
-                                      url = stimulus_url,
-                                      instruction = psychTestR::i18n(preamble_key),
-                                      anchors = anchors,
-                                      header = header,
-                                      reduce_labels = reduce_labels,
-                                      style = style,
-                                      items = sapply(1:num_rating_items, function(x) psychTestR::i18n(sprintf(prompt_key, x)), simplify = T, USE.NAMES = T),
-                                      choices = 0:(scale_length-1),
-                                      labels = sapply(1:scale_length, function(x) psychTestR::i18n(sprintf(label_key, x)), simplify = T, USE.NAMES = T),
-                                      random_order = random_order,
-                                      show_controls = show_controls,
-                                      allow_download = allow_download,
-                                      allow_na = allow_na,
-                                      ...)
-    }),
-    dict = dict)
-  #browser()
+      psychTestR::new_timeline(
+      audio_radiobutton_matrix_page(label = page_label,
+                                    url = stimulus_url,
+                                    instruction = psychTestR::i18n(preamble_key),
+                                    anchors = anchors,
+                                    header = header,
+                                    reduce_labels = reduce_labels,
+                                    style = style,
+                                    items = sapply(1:num_rating_items, function(x) psychTestR::i18n(sprintf(prompt_key, x)), simplify = T, USE.NAMES = T),
+                                    choices = 0:(scale_length-1),
+                                    labels = sapply(1:scale_length, function(x) psychTestR::i18n(sprintf(label_key, x)), simplify = T, USE.NAMES = T),
+                                    random_order = random_order,
+                                    show_controls = show_controls,
+                                    allow_download = allow_download,
+                                    allow_na = allow_na,
+                                    ...), dict = dict)
+    })
+  if(randomize_stimuli){
+      psychTestR::randomise_at_run_time(label,
+                                        logic = gar_pages)
+  }
+  else{
+    psychTestR::join(
+      psychTestR::begin_module(label = label),
+      gar_pages,
+      # scoring
+      psychTestR::end_module()
+    )
 
-  psychTestR::join(
-    psychTestR::begin_module(label = label),
-                   gar,
-                   # scoring
-                   psychTestR::end_module()
-                   )
+  }
 
 }
