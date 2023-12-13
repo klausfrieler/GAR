@@ -60,6 +60,7 @@ GAR_standalone <- function(label = "EMO1",
         show_controls = show_controls,
         allow_download = allow_download,
         ...),
+    psychTestR::elt_save_results_to_disk(complete = T),
     psychTestR::new_timeline(
       psychTestR::final_page(shiny::p(psychTestR::i18n("RESULTS_SAVED"),
                                       psychTestR::i18n("CLOSE_BROWSER"))),

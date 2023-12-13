@@ -77,6 +77,8 @@ GAR <- function(label = "EMO1",
                                     header = header,
                                     reduce_labels = reduce_labels,
                                     style = style,
+                                    trigger_button_text = psychTestR::i18n("CONTINUE"),
+                                    failed_validation_message = psychTestR::i18n("ANSWER_MISSING"),
                                     items = sapply(1:num_rating_items, function(x) psychTestR::i18n(sprintf(prompt_key, x)), simplify = T, USE.NAMES = T),
                                     choices = 0:(scale_length-1),
                                     labels = sapply(1:scale_length, function(x) psychTestR::i18n(sprintf(label_key, x)), simplify = T, USE.NAMES = T),
@@ -86,14 +88,34 @@ GAR <- function(label = "EMO1",
                                     allow_na = allow_na,
                                     ...), dict = dict)
     })
+  save_stimuli <- function(label){
+    function(order, state, ...){
+      #browser()
+      if(!is.null(item_order)){
+        stimuli <- sprintf("%s", item_order[1:num_stimuli])[order]
+      }
+      else{
+        stimuli <- sprintf(items_prefix_pattern, 1:num_stimuli)[order]
+      }
+      message(sprintf("Saving stimulus order for  %s (length: %d): %s", label, length(order), paste(stimuli[order], collapse = ", ")))
+      psychTestR::save_result(state, label, stimuli[order])
+    }}
   if(randomize_stimuli){
+    psychTestR::join(
+      psychTestR::begin_module(label = label),
       psychTestR::randomise_at_run_time(label,
-                                        logic = gar_pages)
+                                        logic = gar_pages,
+                                        save_order = save_stimuli("stimulus_order")),
+      psychTestR::end_module()
+    )
   }
   else{
     psychTestR::join(
       psychTestR::begin_module(label = label),
-      gar_pages,
+      psychTestR::order_at_run_time(label,
+                                    logic = gar_pages,
+                                    get_order = function(...) 1:num_stimuli,
+                                    save_order = save_stimuli("stimulus_order")),
       # scoring
       psychTestR::end_module()
     )
