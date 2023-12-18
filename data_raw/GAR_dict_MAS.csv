@@ -4,7 +4,7 @@ TGAR_MAS_PREAMBLE;Bitte beurteilen Sie die Musik auf folgenden Aspekten.;Bitte b
 TGAR_MAS_0001_PROMPT;Die Komposition bzw. die Version der Komposition ist rundum gelungen.;Die Komposition bzw. die Version der Komposition ist rundum gelungen.;The composition is a complete success.
 TGAR_MAS_0002_PROMPT;Das Stück ist richtig gut.;Das Stück ist richtig gut.;The piece is really good.
 TGAR_MAS_0003_PROMPT;Dieses Musikstück ist künstlerisch wertvoll.;Dieses Musikstück ist künstlerisch wertvoll.;This piece of music is artistically valuable.
-TGAR_MAS_0004_PROMPT;Die Komponisten (Songwriter, Producer...) des Stücks sind offenkundig Meister ihres Fachs.;Die Komponisten (Songwriter, Producer...) des Stücks sind offenkundig Meister ihres Fachs.;The creator(s) of the piece are obviously masters of their craft.
+TGAR_MAS_0004_PROMPT;Die Komponisten (Songwriter, Producer, ...) des Stücks sind offenkundig Meister ihres Fachs.;Die Komponisten (Songwriter, Producer, ...) des Stücks sind offenkundig Meister ihres Fachs.;The creator(s) of the piece are obviously masters of their craft.
 TGAR_MAS_0005_PROMPT;Das Stück enthält alle Bestandteile, die für diese Musikrichtung wichtig sind;Das Stück enthält alle Bestandteile, die für diese Musikrichtung wichtig sind;The piece contains all the elements that are important for this style of music
 TGAR_MAS_0006_PROMPT;Die Musik wäre deutlich ärmer, wenn es dieses Stück nicht gäbe.;Die Musik wäre deutlich ärmer, wenn es dieses Stück nicht gäbe.;Music would be much poorer if this piece did not exist.
 TGAR_MAS_0007_PROMPT;Leute, die sich mit dieser Musikrichtung auskennen, wären von diesem Stück begeistert.;Leute, die sich mit dieser Musikrichtung auskennen, wären von diesem Stück begeistert.;People who are familiar with this style of music would be delighted with this piece.
@@ -17,3 +17,9 @@ TGAR_MAS_0013_PROMPT;Die Musiker haben das Stück sehr gut gespielt.;Die Musiker
 TGAR_MAS_0014_PROMPT;Die Musiker wurden den Anforderungen des Stückes absolut gerecht.;Die Musiker wurden den Anforderungen des Stückes absolut gerecht.;The musicians absolutely met the requirements of the piece.
 TGAR_MAS_0015_PROMPT;Die Musiker beherrschen ihre Instrumente.;Die Musiker beherrschen ihre Instrumente.;The musicians are masters of their instruments.
 TGAR_MAS_0016_PROMPT;Die Aufführung war künstlerisch wertvoll.;Die Aufführung war künstlerisch wertvoll.;The performance of the piece was artistically valuable.
+TGAR_MAS_IE_PREAMBLE;Wie schwierig fanden Sie es, diese Fragen zu beantworten?;Wie schwierig fanden Sie es, diese Fragen zu beantworten?;How difficult was it to answer these items?
+TGAR_MAS_IE5_CHOICE1;Sehr leicht;Sehr leicht;Very easy
+TGAR_MAS_IE5_CHOICE2;Leicht;Leicht;Easy
+TGAR_MAS_IE5_CHOICE3;Teils/teils;Teils/Teils;Neither easy nor hard
+TGAR_MAS_IE5_CHOICE4;Schwerig;Schwerig;Hard
+TGAR_MAS_IE5_CHOICE5;Sehr schwierig;Sehr schwierig;Very hard
