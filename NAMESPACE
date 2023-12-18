@@ -3,6 +3,7 @@
 export(AAT)
 export(GAR)
 export(GAR_standalone)
+export(MAS_item_evaluation)
 export(aat_item_evaluation)
 export(audio_radiobutton_matrix_page)
 export(get_questionnaires)

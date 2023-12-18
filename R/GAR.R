@@ -130,13 +130,18 @@ GAR <- function(label = "EMO1",
   }
 }
 
-MAS_item_evaluation <- function(label = "TGAR_MAS_IE_PREAMBLE",
+#' MAS_item_evaluation
+#'
+#' This function defines a module for assessing MAS items
+#'
+#'
+#' @export
+MAS_item_evaluation <- function(label = "MAS_IE",
                                 style = default_style,
                                 dict = GAR::GAR_dict){
 
-  browser()
   psychTestR::new_timeline(
-    radiobutton_matrix_page(label = "MAS_IE",
+    radiobutton_matrix_page(label = label,
                             instruction = psychTestR::i18n("TGAR_MAS_IE_PREAMBLE"),
                             anchors = FALSE,
                             header = "double",
