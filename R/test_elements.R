@@ -373,7 +373,7 @@ audio_radiobutton_matrix_page <- function(label,
   ), media_mobile_play_button(btn_play_prompt))
   #browser()
   instruction2 <- shiny::tags$div(tagify(instruction),
-                                  shiny::span(url, stylde = "color:red"),
+                                  #shiny::span(url, style = "color:red"),
                                   audio_ui)
 
   radiobutton_matrix_page(label = label,
