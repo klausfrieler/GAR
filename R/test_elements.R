@@ -252,7 +252,6 @@ make_ui_radiobutton_matrix <- function(label,
       "right" = sprintf("text-align:left;min-width:%s", style$bipolar_item_width_right))
   )
 
-  #browser()
   rowIDs <- lapply(items, function(it){
       shiny::div(it, style = style[[polarity]]$row_id_style)
   })

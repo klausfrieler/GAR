@@ -19,7 +19,7 @@ if(!("de" %in% names(GAR_dict_raw))){
   GAR_dict_raw$de <- GAR_dict_raw$de_f
 }
 
-if(!("de" %in% names(GAR_dict_raw))){
+if(!("de" %in% names(GAR_dict_raw_AAT))){
   GAR_dict_raw_AAT$de <- GAR_dict_raw_AAT$de_f
 }
 

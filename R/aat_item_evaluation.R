@@ -11,7 +11,7 @@ aat_item_evaluation <- function(label = "AAT_ITEM_EVAL",
                                 scale_length = 5,
                                 nested = F,
                                 dict = GAR::GAR_dict,
-                                max_items = 43,
+                                max_items = 28,
                                 with_intro = T,
                                 sep = " ... ",
                                 ...) {
@@ -19,8 +19,8 @@ aat_item_evaluation <- function(label = "AAT_ITEM_EVAL",
     as.data.frame() %>%
     filter(stringr::str_detect(key, "TGAR_AAT_M")) %>%
     pull(key)
-
-  items <- items[1:max(min(max_items, 43), 1)]
+  #browser()
+  items <- items[1:max(min(max_items, length(items)), 1)]
   style_block <- "text-align:left;width:40%;margin-left:30%;margin-right:30%;margin-top:1em;margin-bottom:1em;"
   style_single <- "text-align:center;width:60%;margin-left:20%;margin-right:20%;margin-top:1em;margin-bottom:1em;"
 

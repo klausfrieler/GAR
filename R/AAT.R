@@ -46,7 +46,6 @@ AAT <- function(label = "AAT",
                 allow_na = TRUE,
                 dict = GAR::GAR_dict,
                 ...) {
-  #browser()
   if(!(sub_group %in% letters[1:4])){
     stop(sprintf("Unknown subgroup: %s", sub_group))
   }
@@ -75,8 +74,8 @@ AAT <- function(label = "AAT",
   return(a)
 }
 
-bipolar_items_sets <- c("MG" = 24, "MI" = 8, "MA" = 6, "MV" = 5)
-unipolar_items_sets <- c("AT" = 7, "PG" = 11)
+bipolar_items_sets <- c("MG" = 13, "MI" = 6, "MA" = 6, "MV" = 3)
+unipolar_items_sets <- c("AT" = 4, "PG" = 9)
 
 item_sets <- list("bipolar" = bipolar_items_sets,
                   "unipolar" = unipolar_items_sets)
