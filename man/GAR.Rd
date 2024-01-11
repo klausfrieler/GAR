@@ -15,6 +15,7 @@ GAR(
   num_rating_items = 6,
   anchors = FALSE,
   header = "double",
+  header_style = NULL,
   reduce_labels = TRUE,
   style = default_style,
   allow_na = TRUE,
@@ -26,6 +27,8 @@ GAR(
   randomize_stimuli = FALSE,
   show_controls = TRUE,
   allow_download = FALSE,
+  question_header_offset = 0,
+  question_header_max = num_stimuli,
   ...
 )
 }

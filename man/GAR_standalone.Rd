@@ -14,6 +14,7 @@ GAR_standalone(
   num_rating_items = 6,
   anchors = FALSE,
   header = "double",
+  header_style = NULL,
   reduce_labels = TRUE,
   style = default_style,
   allow_na = FALSE,

@@ -20,6 +20,7 @@ GAR <- function(label = "EMO1",
                 num_rating_items = 6,
                 anchors = FALSE,
                 header = "double",
+                header_style = NULL,
                 reduce_labels = TRUE,
                 style = default_style,
                 allow_na = TRUE,
@@ -30,6 +31,8 @@ GAR <- function(label = "EMO1",
                 randomize_stimuli = FALSE,
                 show_controls = TRUE,
                 allow_download = FALSE,
+                question_header_offset = 0,
+                question_header_max = num_stimuli,
                 ...) {
   #browser()
   dots <- list(...)
@@ -77,9 +80,14 @@ GAR <- function(label = "EMO1",
       psychTestR::new_timeline(
       audio_radiobutton_matrix_page(label = page_label,
                                     url = stimulus_url,
-                                    instruction = psychTestR::i18n(preamble_key),
+                                    instruction = shiny::p(
+                                      shiny::h4(psychTestR::i18n("TGAR_AAT_ITEM_HEADER",
+                                                                 sub = list(item_id = id + question_header_offset,
+                                                                            num_stimuli = question_header_max))),
+                                                           psychTestR::i18n(preamble_key)),
                                     anchors = anchors,
                                     header = header,
+                                    header_style = header_style,
                                     reduce_labels = reduce_labels,
                                     style = style,
                                     trigger_button_text = psychTestR::i18n("CONTINUE"),
@@ -138,6 +146,7 @@ GAR <- function(label = "EMO1",
 #' @export
 MAS_item_evaluation <- function(label = "MAS_IE",
                                 style = default_style,
+                                header_style = NULL,
                                 dict = GAR::GAR_dict){
 
   psychTestR::new_timeline(
@@ -145,6 +154,7 @@ MAS_item_evaluation <- function(label = "MAS_IE",
                             instruction = psychTestR::i18n("TGAR_MAS_IE_PREAMBLE"),
                             anchors = FALSE,
                             header = "double",
+                            header_style = header_style,
                             reduce_labels = FALSE,
                             style = style,
                             trigger_button_text = psychTestR::i18n("CONTINUE"),

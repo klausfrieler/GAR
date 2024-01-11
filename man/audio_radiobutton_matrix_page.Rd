@@ -14,6 +14,7 @@ audio_radiobutton_matrix_page(
   labels = NULL,
   anchors = FALSE,
   header = "double",
+  header_style = NULL,
   style = default_style,
   reduce_labels = TRUE,
   trigger_button_text = "Continue",

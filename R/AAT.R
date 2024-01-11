@@ -157,7 +157,9 @@ get_sub_group_items <- function(sub_group, sub_scale, num_items){
   ret
 }
 
-get_sub_group_pages <- function(sub_group, page_label, stimulus_url, random_order, item_id, num_stimuli, ...){
+get_sub_group_pages <- function(sub_group, page_label,
+                                stimulus_url, random_order, item_id, num_stimuli,
+                                header_style = NULL,...){
   preamble_key <- sprintf("TGAR_AAT_PREAMBLE")
   scale_length <- 7
   #item_key <- sprintf("TGAR_ATT_PROMPT_%%04d")
@@ -172,6 +174,7 @@ get_sub_group_pages <- function(sub_group, page_label, stimulus_url, random_orde
                                     psychTestR::i18n(preamble_key)),
                                   anchors = FALSE,
                                   header = "simple_str",
+                                  header_style = header_style,
                                   reduce_labels = FALSE,
                                   style = AAT_style,
                                   trigger_button_text = psychTestR::i18n("CONTINUE"),
@@ -191,6 +194,7 @@ get_sub_group_pages <- function(sub_group, page_label, stimulus_url, random_orde
                                     instruction = psychTestR::i18n(preamble_key),
                                     anchors = FALSE,
                                     header = "double",
+                                    header_style = header_style,
                                     reduce_labels = FALSE,
                                     style = AAT_style,
                                     trigger_button_text = psychTestR::i18n("CONTINUE"),

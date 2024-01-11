@@ -14,6 +14,7 @@ make_ui_radiobutton_matrix(
   anchors = TRUE,
   style = default_style,
   header = c("simple_num", "simple_str", "double"),
+  header_style = NULL,
   trigger_button_text = "Continue",
   hide = FALSE,
   id = "response_ui"

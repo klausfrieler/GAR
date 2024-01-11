@@ -57,6 +57,7 @@ radiobutton_matrix_page <- function(label,
                                     labels = NULL,
                                     anchors = FALSE,
                                     header = c("double", "simple_str", "simple_num"),
+                                    header_style = NULL,
                                     reduce_labels = TRUE,
                                     style = default_style,
                                     trigger_button_text = "Continue",
@@ -76,6 +77,7 @@ radiobutton_matrix_page <- function(label,
     is.character.or.numeric(choices),
     length(choices) > 0L
   )
+  #browser()
   instruction_tag <- NULL
 
   if(!is.null(instruction)) {
@@ -96,6 +98,7 @@ radiobutton_matrix_page <- function(label,
                                                    trigger_button_text = trigger_button_text,
                                                    anchors = anchors,
                                                    header = header,
+                                                   header_style = header_style,
                                                    reduce_labels = reduce_labels,
                                                    hide = hide_response_ui,
                                                    id = response_ui_id))
@@ -182,6 +185,7 @@ make_ui_radiobutton_matrix <- function(label,
                                        header = c("simple_num",
                                                   "simple_str",
                                                   "double"),
+                                       header_style = NULL,
                                        trigger_button_text = "Continue",
                                        hide = FALSE,
                                        id = "response_ui") {
@@ -223,9 +227,24 @@ make_ui_radiobutton_matrix <- function(label,
     else{
       sub_labels <- abs(choices)
     }
+    if(is.null(header_style)){
+      header_style <-list(top = "height:41px;font-size:12pt;vertical-align:top;color:red",
+                          bottom = "height:41px;font-size:12pt;vertical-align:top;color:green")
 
-    choiceNames <- lapply(1:length(scale_labels), function(i)
-      shiny::tags$span(scale_labels[i], shiny::tags$br(), sub_labels[[i]]))
+    }
+    else{
+      stopifnot(length(header_style) == 2,
+                length(intersect(names(header_style), c("top", "bottom"))) == 2)
+    }
+    choiceNames <- lapply(1:length(scale_labels), function(i){
+      shiny::tags$div(shiny::tags$div(scale_labels[i], style = header_style[["top"]]),
+                      shiny::tags$div(sub_labels[[i]], style = header_style[["bottom"]]))
+
+      # shiny::tags$span(scale_labels[i],
+      #                  shiny::tags$br(),
+      #                  sub_labels[[i]])
+
+    })
 
   }
   if(polarity == "unipolar"){
@@ -332,6 +351,7 @@ audio_radiobutton_matrix_page <- function(label,
                                           labels = NULL,
                                           anchors = FALSE,
                                           header = "double",
+                                          header_style = NULL,
                                           style = default_style,
                                           reduce_labels = TRUE,
                                           trigger_button_text = "Continue",
@@ -379,9 +399,11 @@ audio_radiobutton_matrix_page <- function(label,
                           polarity = polarity,
                           items = items,
                           choices = choices,
+                          instruction = instruction2,
                           labels = labels,
                           anchors = anchors,
                           header = header,
+                          header_style = header_style,
                           reduce_labels = reduce_labels,
                           style = style,
                           trigger_button_text = trigger_button_text,
@@ -392,6 +414,5 @@ audio_radiobutton_matrix_page <- function(label,
                           random_order = random_order,
                           response_ui_id = response_ui_id,
                           on_complete = on_complete,
-                          admin_ui = admin_ui,
-                          instruction = instruction2)
+                          admin_ui = admin_ui)
 }
