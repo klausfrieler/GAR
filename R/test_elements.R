@@ -58,6 +58,7 @@ radiobutton_matrix_page <- function(label,
                                     anchors = FALSE,
                                     header = c("double", "simple_str", "simple_num"),
                                     header_style = NULL,
+                                    sublabel_type = c("none", "directed", "symmetric"),
                                     reduce_labels = TRUE,
                                     style = default_style,
                                     trigger_button_text = "Continue",
@@ -99,6 +100,7 @@ radiobutton_matrix_page <- function(label,
                                                    anchors = anchors,
                                                    header = header,
                                                    header_style = header_style,
+                                                   sublabel_type = sublabel_type,
                                                    reduce_labels = reduce_labels,
                                                    hide = hide_response_ui,
                                                    id = response_ui_id))
@@ -185,6 +187,7 @@ make_ui_radiobutton_matrix <- function(label,
                                        header = c("simple_num",
                                                   "simple_str",
                                                   "double"),
+                                       sublabel_type = c("none", "directed", "symmetric"),
                                        header_style = NULL,
                                        trigger_button_text = "Continue",
                                        hide = FALSE,
@@ -204,49 +207,37 @@ make_ui_radiobutton_matrix <- function(label,
   reduced_labels <- rep("", length(scale_labels))
   reduced_labels[1] <- scale_labels[1]
   reduced_labels[length(reduced_labels)] <- scale_labels[length(reduced_labels)]
+
   if(reduce_labels){
     scale_labels <- reduced_labels
   }
-
+  sub_labels <- get_sublabels(sublabel_type, length(scale_labels))
   if(header == "simple_num"){
     if(polarity == "unipolar") {
       choiceNames <- 1:length(scale_labels)
     }
     else{
-      choiceNames <- abs(choices)
+      choiceNames <- get_sublabels("symmetric", length(scale_labels))
     }
   }
   else if(header == "simple_str"){
     choiceNames <- scale_labels
   }
-  else if(header == "double"){
-    #browser()
-    if(polarity == "unipolar") {
-      sub_labels <- 1:length(scale_labels)
-    }
-    else{
-      sub_labels <- abs(choices)
-    }
-    if(is.null(header_style)){
-      header_style <-list(top = "height:41px;font-size:12pt;vertical-align:top;color:red",
-                          bottom = "height:41px;font-size:12pt;vertical-align:top;color:green")
-
-    }
-    else{
-      stopifnot(length(header_style) == 2,
-                length(intersect(names(header_style), c("top", "bottom"))) == 2)
-    }
-    choiceNames <- lapply(1:length(scale_labels), function(i){
-      shiny::tags$div(shiny::tags$div(scale_labels[i], style = header_style[["top"]]),
-                      shiny::tags$div(sub_labels[[i]], style = header_style[["bottom"]]))
-
-      # shiny::tags$span(scale_labels[i],
-      #                  shiny::tags$br(),
-      #                  sub_labels[[i]])
-
-    })
+  #browser()
+  messagef(sprintf("[%s]: header: %s, polarity: %s, sublabel type: %s", label, header, polarity, sublabel_type))
+  if(is.null(header_style)){
+    header_style <-list(top = "height:63px;font-size:10pt;vertical-align:middle;color:black;min-width:70px;border:0px solid black",
+                        bottom = "height:21px;font-size:12pt;vertical-align:middle;color:black;min-width:70px;border:0px solid black")
 
   }
+  else{
+    stopifnot(length(header_style) == 2,
+              length(intersect(names(header_style), c("top", "bottom"))) == 2)
+  }
+  choiceNames <- lapply(1:length(scale_labels), function(i){
+    shiny::tags$div(shiny::tags$div(scale_labels[i], style = header_style[["top"]]),
+                    shiny::tags$div(sub_labels[[i]], style = header_style[["bottom"]]))
+  })
   if(polarity == "unipolar"){
     if(anchors){
       rowLLabels <- rep(scale_labels[1], length(items))
@@ -352,6 +343,7 @@ audio_radiobutton_matrix_page <- function(label,
                                           anchors = FALSE,
                                           header = "double",
                                           header_style = NULL,
+                                          sublabel_type = c("none", "directed", "symmetric"),
                                           style = default_style,
                                           reduce_labels = TRUE,
                                           trigger_button_text = "Continue",
@@ -390,7 +382,6 @@ audio_radiobutton_matrix_page <- function(label,
     controls = if (show_controls) "controls",
     controlsList = if (!allow_download) "nodownload"
   ), media_mobile_play_button(btn_play_prompt))
-  #browser()
   instruction2 <- shiny::tags$div(tagify(instruction),
                                   #shiny::span(url, style = "color:red"),
                                   audio_ui)
@@ -404,6 +395,7 @@ audio_radiobutton_matrix_page <- function(label,
                           anchors = anchors,
                           header = header,
                           header_style = header_style,
+                          sublabel_type = sublabel_type,
                           reduce_labels = reduce_labels,
                           style = style,
                           trigger_button_text = trigger_button_text,

@@ -11,6 +11,7 @@ AAT(
   num_stimuli = 1,
   random_order = FALSE,
   with_module = F,
+  header_style = NULL,
   audio_url = "https://s3.eu-west-1.amazonaws.com/media.dots.org/stimuli/AAT",
   audio_type = "wav",
   allow_na = TRUE,
@@ -32,6 +33,9 @@ Randomize items (not stimuli!)}
 
 \item{with_module}{(boolean)
 Wrap AAt into module.}
+
+\item{header_style}{(string)
+Header style to be pass on to make_ui_radiobutton_NAFC}
 
 \item{audio_url}{(URL)
 Where are the stimuli?}

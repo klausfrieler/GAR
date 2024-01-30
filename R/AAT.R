@@ -10,7 +10,7 @@ AAT_style <-
                                     right = "100px"),
                    label_syles = c(left = "text-align:left;min-width:100px",
                                    right = "text-align:left;min-width:100px")),
-    div_style = "width:60%;margin-left:20%;margin-right:20%")
+    div_style = "width:80%;margin-left:10%;margin-right:10%")
 
 #' Audio Attention Study Modules
 #'
@@ -26,6 +26,8 @@ AAT_style <-
 #' Randomize items (not stimuli!)
 #' @param with_module (boolean)
 #' Wrap AAt into module.
+#' @param header_style (string)
+#' Header style to be pass on to make_ui_radiobutton_NAFC
 #' @param audio_url (URL)
 #' Where are the stimuli?
 #' @param audio_type (character scalar)
@@ -41,6 +43,7 @@ AAT <- function(label = "AAT",
                 num_stimuli = 1,
                 random_order = FALSE,
                 with_module = F,
+                header_style = NULL,
                 audio_url = "https://s3.eu-west-1.amazonaws.com/media.dots.org/stimuli/AAT",
                 audio_type = "wav",
                 allow_na = TRUE,
@@ -58,7 +61,14 @@ AAT <- function(label = "AAT",
                                                    audio_type))
       #browser()
       psychTestR::new_timeline(
-        get_sub_group_pages(sub_group, page_label, stimulus_url, random_order, id, num_stimuli, ...),
+        get_sub_group_pages(sub_group,
+                            page_label,
+                            stimulus_url,
+                            random_order,
+                            id,
+                            num_stimuli,
+                            header_style = header_style,
+                            ...),
         dict = dict)
       }))
 
@@ -86,22 +96,25 @@ get_sub_group_labels <- function(sub_group, sub_scale, scale_length = 5){
   if(length(sub_scale) > 1){
     sub_scale <- sub_scale[[1]]
   }
-  type <- "bipolar"
-  if(substr(sub_scale, 1, 1) != "M"){
-    type <- "unipolar"
-  }
-  else{
-    if(sub_group %in% c("b", "c")){
-      type <- "unipolar"
-    }
-  }
-  message(sprintf("Subscale: %s, sub_group: %s, scale: %s", sub_scale, sub_group, type))
+  # type <- "bipolar"
+  # if(substr(sub_scale, 1, 1) != "M" ){
+  #   type <- "unipolar"
+  # }
+  # else{
+  #   if(sub_group %in% c("b", "c")){
+  #     type <- "unipolar"
+  #   }
+  # }
+  type <- "unipolar"
+  if(sub_group == "d") type <- "bipolar"
+  #message(sprintf("Subscale: %s, sub_group: %s, scale: %s", sub_scale, sub_group, type))
   if(type == "bipolar"){
     label_key <- sprintf("TGAR_AAT_SD%s_CHOICE%%01d", scale_length)
+    #label_key <- sprintf("TGAR_MAS%s_CHOICE%%01d", scale_length)
     sapply(1:scale_length, function(x) psychTestR::i18n(sprintf(label_key, x)), simplify = T, USE.NAMES = T)
   }
   else {
-    label_key <- sprintf("TGAR_AAT_L%s_CHOICE%%01d", scale_length)
+    label_key <- sprintf("TGAR_MAS%s_CHOICE%%01d", scale_length)
     sapply(1:scale_length, function(x) psychTestR::i18n(sprintf(label_key, x)), simplify = T, USE.NAMES = T)
   }
 }
@@ -157,24 +170,58 @@ get_sub_group_items <- function(sub_group, sub_scale, num_items){
   ret
 }
 
-get_sub_group_pages <- function(sub_group, page_label,
-                                stimulus_url, random_order, item_id, num_stimuli,
-                                header_style = NULL,...){
+get_sublabels <- function(type, scale_length){
+  if(type == "none") {
+    sublabels <- rep("", scale_length)
+  }
+  else if(type == "directed"){
+    sublabels <- 1:scale_length
+  }
+  else if(type == "symmetric"){
+    if(scale_length %% 2 == 0) {
+      sublabels <- abs(c(seq(-scale_length/2, -1), seq(1, scale_length/2)))
+    }
+    else{
+      sublabels <- abs(seq(-floor(scale_length/2), floor(scale_length/2)))
+    }
+  }
+  else {
+    stop(Sprintf("Unknown sublabel type: %s", type))
+  }
+  sublabels
+}
+
+get_sub_group_pages <- function(sub_group,
+                                page_label,
+                                stimulus_url,
+                                random_order,
+                                item_id,
+                                num_stimuli,
+                                response_scale = "L7",
+                                header_style = NULL,
+                                ...){
   preamble_key <- sprintf("TGAR_AAT_PREAMBLE")
   scale_length <- 7
   #item_key <- sprintf("TGAR_ATT_PROMPT_%%04d")
   #label_key <- sprintf("TGAR_%s_CHOICE%%01d", response_scale)
   #browser()
+  message(sprintf("Subgroup: %s, sublabel type: %s", sub_group, c(a = "directed", b = "directed", c = "directed", d = "symmetric")[sub_group]))
+  sublabel_type <- c(a = "directed", b = "directed", c = "directed", d = "symmetric")[sub_group]
   bipolar <- psychTestR::join(
     lapply(c("M"), function(item_set)
     audio_radiobutton_matrix_page(label = sprintf("%s_%s", page_label, item_set),
                                   polarity = "bipolar",
                                   url = stimulus_url,
-                                  instruction = shiny::p(shiny::h4(psychTestR::i18n("TGAR_AAT_ITEM_HEADER", sub = list(item_id = item_id, num_stimuli = num_stimuli))),
+                                  instruction = shiny::p(
+                                    shiny::h4(
+                                      psychTestR::i18n("TGAR_AAT_ITEM_HEADER",
+                                                       sub = list(item_id = item_id,
+                                                                  num_stimuli = num_stimuli))),
                                     psychTestR::i18n(preamble_key)),
                                   anchors = FALSE,
-                                  header = "simple_str",
+                                  header = "double",
                                   header_style = header_style,
+                                  sublabel_type = sublabel_type,
                                   reduce_labels = FALSE,
                                   style = AAT_style,
                                   trigger_button_text = psychTestR::i18n("CONTINUE"),
@@ -196,6 +243,7 @@ get_sub_group_pages <- function(sub_group, page_label,
                                     header = "double",
                                     header_style = header_style,
                                     reduce_labels = FALSE,
+                                    sublabel_type = "directed",
                                     style = AAT_style,
                                     trigger_button_text = psychTestR::i18n("CONTINUE"),
                                     items = get_sub_group_items(sub_group, item_set, unipolar_items_sets[item_set]),

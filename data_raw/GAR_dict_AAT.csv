@@ -51,7 +51,7 @@
 "TGAR_AAT_EV2_PREAMBLE", "Ist das Wortpaar geeignet, um Merkmale von Musik zu beschreiben?", "Is the word pair appropriate to describe characteristics of music?"
 "TGAR_AAT_EV1_PREAMBLE_SINGLE", "Wie gegensätzlich ist das Wortpaar?", "How contradictory is the word pairs?"
 "TGAR_AAT_EV2_PREAMBLE_SINGLE", "Ist dieses Wortpaar geeignet, um Musik zu beschreiben?", "Is this word pair appropriate to describe music?"
-"TGAR_AAT_ITEM_HEADER", "Frage {{item_id}} von {{num_stimuli}}", "Item {{item_id}} of {{num_stimuli}}"
+"TGAR_AAT_ITEM_HEADER", "Musikbeispiel {{item_id}} von {{num_stimuli}}", "Item {{item_id}} of {{num_stimuli}}"
 "TGAR_AAT_L5_CHOICE1","stimme nicht zu","disagree"
 "TGAR_AAT_L5_CHOICE2","stimme eher nicht zu","somehwat disagree"
 "TGAR_AAT_L5_CHOICE3","weder noch","neither agree nor disagree"

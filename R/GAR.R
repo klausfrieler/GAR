@@ -57,7 +57,7 @@ GAR <- function(label = "EMO1",
   scale_length <- as.numeric(stringr::str_extract(response_scale, "[0-9]+"))
 
   preamble_key <- sprintf("TGAR_%s_PREAMBLE", questionnaire)
-  prompt_key <- sprintf("TGAR_%s_%%04d_PROMPT", questionnaire, num_rating_items)
+  prompt_key <- sprintf("TGAR_%s_%%04d_PROMPT", questionnaire)
   label_key <- sprintf("TGAR_%s_CHOICE%%01d", response_scale)
   #browser()
   if(!is.null(item_order)){
@@ -80,14 +80,11 @@ GAR <- function(label = "EMO1",
       psychTestR::new_timeline(
       audio_radiobutton_matrix_page(label = page_label,
                                     url = stimulus_url,
-                                    instruction = shiny::p(
-                                      shiny::h4(psychTestR::i18n("TGAR_AAT_ITEM_HEADER",
-                                                                 sub = list(item_id = id + question_header_offset,
-                                                                            num_stimuli = question_header_max))),
-                                                           psychTestR::i18n(preamble_key)),
+                                    instruction =  psychTestR::i18n(preamble_key),
                                     anchors = anchors,
                                     header = header,
                                     header_style = header_style,
+                                    sublabel_type = "directed",
                                     reduce_labels = reduce_labels,
                                     style = style,
                                     trigger_button_text = psychTestR::i18n("CONTINUE"),
@@ -155,6 +152,7 @@ MAS_item_evaluation <- function(label = "MAS_IE",
                             anchors = FALSE,
                             header = "double",
                             header_style = header_style,
+                            sublabel_type = c("directed"),
                             reduce_labels = FALSE,
                             style = style,
                             trigger_button_text = psychTestR::i18n("CONTINUE"),
