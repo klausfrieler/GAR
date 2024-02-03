@@ -238,7 +238,12 @@ get_sub_group_pages <- function(sub_group,
       audio_radiobutton_matrix_page(label = sprintf("%s_%s", page_label, item_set),
                                     polarity = "unipolar",
                                     url = stimulus_url,
-                                    instruction = psychTestR::i18n(preamble_key),
+                                    instruction = shiny::p(
+                                      shiny::h4(
+                                        psychTestR::i18n("TGAR_AAT_ITEM_HEADER",
+                                                         sub = list(item_id = item_id,
+                                                                    num_stimuli = num_stimuli))),
+                                      psychTestR::i18n(preamble_key)),
                                     anchors = FALSE,
                                     header = "double",
                                     header_style = header_style,
