@@ -84,8 +84,8 @@ AAT <- function(label = "AAT",
   return(a)
 }
 
-bipolar_items_sets <- c("MG" = 13, "MI" = 6, "MA" = 6, "MV" = 3)
-unipolar_items_sets <- c("AT" = 4, "PG" = 9)
+bipolar_items_sets <- c("MG" = 14, "MI" = 6, "MA" = 6, "MV" = 4)
+unipolar_items_sets <- c("AT" = 5, "PG" = 10)
 
 item_sets <- list("bipolar" = bipolar_items_sets,
                   "unipolar" = unipolar_items_sets)
