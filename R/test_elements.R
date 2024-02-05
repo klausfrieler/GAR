@@ -121,7 +121,7 @@ radiobutton_matrix_page <- function(label,
 
   validate <- function(answer,  ...) {
     valid  <- TRUE
-    messagef("[validate] allow_na: %s", allow_na)
+    #messagef("[validate] allow_na: %s", allow_na)
 
     if(!allow_na){
       if(any(is.na(answer))){
