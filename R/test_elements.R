@@ -224,7 +224,7 @@ make_ui_radiobutton_matrix <- function(label,
     choiceNames <- scale_labels
   }
   #browser()
-  messagef(sprintf("[%s]: header: %s, polarity: %s, sublabel type: %s", label, header, polarity, sublabel_type))
+  #messagef(sprintf("[%s]: header: %s, polarity: %s, sublabel type: %s", label, header, polarity, sublabel_type))
   if(is.null(header_style)){
     header_style <-list(top = "height:63px;font-size:10pt;vertical-align:middle;color:black;min-width:70px;border:0px solid black",
                         bottom = "height:21px;font-size:12pt;vertical-align:middle;color:black;min-width:70px;border:0px solid black")

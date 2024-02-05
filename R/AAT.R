@@ -205,7 +205,7 @@ get_sub_group_pages <- function(sub_group,
   #item_key <- sprintf("TGAR_ATT_PROMPT_%%04d")
   #label_key <- sprintf("TGAR_%s_CHOICE%%01d", response_scale)
   #browser()
-  message(sprintf("Subgroup: %s, sublabel type: %s", sub_group, c(a = "directed", b = "directed", c = "directed", d = "symmetric")[sub_group]))
+  #message(sprintf("Subgroup: %s, sublabel type: %s", sub_group, c(a = "directed", b = "directed", c = "directed", d = "symmetric")[sub_group]))
   sublabel_type <- c(a = "directed", b = "directed", c = "directed", d = "symmetric")[sub_group]
   bipolar <- psychTestR::join(
     lapply(c("M"), function(item_set)
