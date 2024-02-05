@@ -68,6 +68,7 @@ AAT <- function(label = "AAT",
                             id,
                             num_stimuli,
                             header_style = header_style,
+                            allow_na = allow_na,
                             ...),
         dict = dict)
       }))
@@ -197,11 +198,13 @@ get_sub_group_pages <- function(sub_group,
                                 random_order,
                                 item_id,
                                 num_stimuli,
+                                allow_na = TRUE,
                                 response_scale = "L7",
                                 header_style = NULL,
                                 ...){
   preamble_key <- sprintf("TGAR_AAT_PREAMBLE")
   scale_length <- 7
+
   #item_key <- sprintf("TGAR_ATT_PROMPT_%%04d")
   #label_key <- sprintf("TGAR_%s_CHOICE%%01d", response_scale)
   #browser()
@@ -231,7 +234,7 @@ get_sub_group_pages <- function(sub_group,
                                   random_order = random_order,
                                   show_controls = TRUE,
                                   allow_download = FALSE,
-                                  allow_na = TRUE,
+                                  allow_na = allow_na,
                                   ...)))
   unipolar <- psychTestR::join(
     lapply(names(unipolar_items_sets), function(item_set){
@@ -257,7 +260,7 @@ get_sub_group_pages <- function(sub_group,
                                     random_order = random_order,
                                     show_controls = TRUE,
                                     allow_download = FALSE,
-                                    allow_na = TRUE,
+                                    allow_na = allow_na,
                                     ...)
       }))
   #browser()

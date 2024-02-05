@@ -62,7 +62,7 @@ radiobutton_matrix_page <- function(label,
                                     reduce_labels = TRUE,
                                     style = default_style,
                                     trigger_button_text = "Continue",
-                                    allow_na = FALSE,
+                                    allow_na = TRUE,
                                     failed_validation_message = "Answer missing!",
                                     save_answer = TRUE,
                                     hide_response_ui = FALSE,
@@ -115,14 +115,15 @@ radiobutton_matrix_page <- function(label,
     #names(answer) <- stringr::str_remove_all(stringr::str_replace_all(tolower(names(answer)), " ", "_"), "[.]")
 
     names(answer) <- sprintf("%s.q%d", label, item_order)
-    print(answer)
     answer
 
   }
 
-  validate <- function(answer, allow_NA = allow_na, ...) {
+  validate <- function(answer,  ...) {
     valid  <- TRUE
-    if(!allow_NA){
+    messagef("[validate] allow_na: %s", allow_na)
+
+    if(!allow_na){
       if(any(is.na(answer))){
         valid <- failed_validation_message
       }
@@ -369,6 +370,7 @@ audio_radiobutton_matrix_page <- function(label,
             is.scalar.logical(show_controls),
             is.scalar.logical(allow_download),
             is.scalar.logical(hide_response_ui))
+
   audio_ui <- shiny::tags$div(shiny::tags$audio(
     shiny::tags$head(shiny::tags$script(shiny::HTML(media.js$media_not_played))),
     shiny::tags$source(src = url, type = paste0("audio/", audio_type)),

@@ -51,7 +51,8 @@ GAR <- function(label = "EMO1",
                audio_url = audio_url,
                audio_type = audio_type,
                random_order = random_order,
-               list(...)$sub_group))
+               allow_na = allow_na,
+               sub_group = list(...)$sub_group))
   }
   num_rating_items <- max(1, min(num_rating_items, quest[quest$id == questionnaire,]$max_items))
   scale_length <- as.numeric(stringr::str_extract(response_scale, "[0-9]+"))

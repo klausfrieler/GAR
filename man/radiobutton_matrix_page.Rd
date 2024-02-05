@@ -18,7 +18,7 @@ radiobutton_matrix_page(
   reduce_labels = TRUE,
   style = default_style,
   trigger_button_text = "Continue",
-  allow_na = FALSE,
+  allow_na = TRUE,
   failed_validation_message = "Answer missing!",
   save_answer = TRUE,
   hide_response_ui = FALSE,
