@@ -10,7 +10,24 @@ AAT_style <-
                                     right = "100px"),
                    label_syles = c(left = "text-align:left;min-width:100px",
                                    right = "text-align:left;min-width:100px")),
-    div_style = "width:80%;margin-left:10%;margin-right:10%")
+    div_style = "width:60%;margin-left:20%;margin-right:20%")
+
+get_AAT_stimulus_order <- function(num_stimuli){
+  function(state, ...){
+    seed <-  psychTestR::get_session_info(state, complete = F)$p_id %>%
+      digest::sha1() %>%
+      charToRaw() %>%
+      as.integer() %>%
+      sum()
+    set.seed(seed)
+    item_order <-  sample(1:num_stimuli)
+    messagef("[AAT item_oder] p_id: %s, seed:%d, order: [%s]",
+             psychTestR::get_session_info(state, complete = F)$p_id,
+             seed, paste(item_order, collapse = " "))
+    item_order
+  }
+}
+
 
 #' Audio Attention Study Modules
 #'
@@ -41,9 +58,12 @@ AAT <- function(label = "AAT",
                 sub_group = "a",
                 items_prefix_pattern = "s%03d",
                 num_stimuli = 1,
+                item_order = NULL,
+                randomize_stimuli = FALSE,
                 random_order = FALSE,
                 with_module = F,
                 header_style = NULL,
+                style = AAT_style,
                 audio_url = "https://s3.eu-west-1.amazonaws.com/media.dots.org/stimuli/AAT",
                 audio_type = "wav",
                 allow_na = TRUE,
@@ -53,7 +73,7 @@ AAT <- function(label = "AAT",
     stop(sprintf("Unknown subgroup: %s", sub_group))
   }
 
-  aat <-  psychTestR::join(
+  aat_pages <-
     lapply(1:num_stimuli, function(id){
       page_label <- sprintf("%s_%03d", label, id)
       stimulus_url <- file.path(audio_url, sprintf("%s.%s",
@@ -67,22 +87,67 @@ AAT <- function(label = "AAT",
                             random_order,
                             id,
                             num_stimuli,
+                            style = style,
                             header_style = header_style,
                             allow_na = allow_na,
                             ...),
         dict = dict)
-      }))
+      })
 
-  aat <- do.call(psychTestR::join, aat)
-  a <-
+  #aat <- do.call(psychTestR::join, aat)
+
+  save_stimuli <- function(label){
+    function(order, state, ...){
+      #browser()
+      if(!is.null(item_order)){
+        stimuli <- sprintf("%s", item_order[1:num_stimuli])[order]
+      }
+      else{
+        stimuli <- sprintf(items_prefix_pattern, 1:num_stimuli)[order]
+      }
+      message(sprintf("Saving stimulus order for '%s' (length: %d): %s", label,
+                      length(order),
+                      paste(stimuli, collapse = ", ")))
+      psychTestR::save_result(state, label, stimuli)
+    }}
+  if(randomize_stimuli){
     psychTestR::join(
-      if(with_module)psychTestR::begin_module(label = label),
-        aat,
-      # scoring
-      if(with_module)psychTestR::end_module()
+      psychTestR::begin_module(label = label),
+      psychTestR::randomise_at_run_time(label,
+                                    logic = aat_pages,
+                                    #get_order = get_AAT_stimulus_order(num_stimuli),
+                                    save_order = save_stimuli("AAT_stim_order_random")),
+      psychTestR::end_module()
     )
-  #print(class(a))
-  return(a)
+  }
+  else{
+    psychTestR::join(
+      psychTestR::begin_module(label = label),
+      psychTestR::order_at_run_time(label,
+                                    logic = aat_pages,
+                                    get_order = function(...) 1:num_stimuli,
+                                    save_order = save_stimuli("AAT_stim_order_fixed")),
+      # scoring
+      psychTestR::end_module()
+    )
+
+  }
+
+  # a <-
+  #   psychTestR::join(
+  #     if(with_module)psychTestR::begin_module(label = label),
+  #     if(randomize_stimuli) psychTestR::randomise_at_run_time(label,
+  #                                                             logic = aat,
+  #                                                             save_order = save_stimuli("stimulus_order")),
+  #
+  #     if(!randomize_stimuli) psychTestR::order_at_run_time(label,
+  #                                                          logic = aat,
+  #                                                          get_order = function(...) 1:num_stimuli,
+  #                                                          save_order = save_stimuli("stimulus_order")),
+  #     if(with_module)psychTestR::end_module()
+  #   )
+  # #print(class(a))
+  # return(a)
 }
 
 bipolar_items_sets <- c("MG" = 14, "MI" = 6, "MA" = 6, "MV" = 4)
@@ -107,7 +172,7 @@ get_sub_group_labels <- function(sub_group, sub_scale, scale_length = 5){
   #   }
   # }
   type <- "unipolar"
-  if(sub_group == "d") type <- "bipolar"
+  if(sub_group == "a" || sub_group == "d") type <- "bipolar"
   #message(sprintf("Subscale: %s, sub_group: %s, scale: %s", sub_scale, sub_group, type))
   if(type == "bipolar"){
     label_key <- sprintf("TGAR_AAT_SD%s_CHOICE%%01d", scale_length)
@@ -198,6 +263,7 @@ get_sub_group_pages <- function(sub_group,
                                 random_order,
                                 item_id,
                                 num_stimuli,
+                                style = AAT_style,
                                 allow_na = TRUE,
                                 response_scale = "L7",
                                 header_style = NULL,
@@ -209,7 +275,7 @@ get_sub_group_pages <- function(sub_group,
   #label_key <- sprintf("TGAR_%s_CHOICE%%01d", response_scale)
   #browser()
   #message(sprintf("Subgroup: %s, sublabel type: %s", sub_group, c(a = "directed", b = "directed", c = "directed", d = "symmetric")[sub_group]))
-  sublabel_type <- c(a = "directed", b = "directed", c = "directed", d = "symmetric")[sub_group]
+  sublabel_type <- c(a = "symmetric", b = "directed", c = "directed", d = "symmetric")[sub_group]
   bipolar <- psychTestR::join(
     lapply(c("M"), function(item_set)
     audio_radiobutton_matrix_page(label = sprintf("%s_%s", page_label, item_set),
@@ -226,7 +292,7 @@ get_sub_group_pages <- function(sub_group,
                                   header_style = header_style,
                                   sublabel_type = sublabel_type,
                                   reduce_labels = FALSE,
-                                  style = AAT_style,
+                                  style = style,
                                   trigger_button_text = psychTestR::i18n("CONTINUE"),
                                   items = get_sub_group_items(sub_group, item_set, bipolar_items_sets[item_set]),
                                   choices = 0:(scale_length - 1),
@@ -252,7 +318,7 @@ get_sub_group_pages <- function(sub_group,
                                     header_style = header_style,
                                     reduce_labels = FALSE,
                                     sublabel_type = "directed",
-                                    style = AAT_style,
+                                    style = style,
                                     trigger_button_text = psychTestR::i18n("CONTINUE"),
                                     items = get_sub_group_items(sub_group, item_set, unipolar_items_sets[item_set]),
                                     choices = 0:(scale_length - 1),
@@ -265,4 +331,5 @@ get_sub_group_pages <- function(sub_group,
       }))
   #browser()
   psychTestR::join(bipolar, unipolar)
+
 }

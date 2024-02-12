@@ -108,15 +108,17 @@ GAR <- function(label = "EMO1",
       else{
         stimuli <- sprintf(items_prefix_pattern, 1:num_stimuli)[order]
       }
-      message(sprintf("Saving stimulus order for  %s (length: %d): %s", label, length(order), paste(stimuli[order], collapse = ", ")))
-      psychTestR::save_result(state, label, stimuli[order])
+      message(sprintf("Saving stimulus order for  %s (length: %d): %s",
+                      label, length(order),
+                      paste(stimuli[order], collapse = ", ")))
+      psychTestR::save_result(state, label, stimuli)
     }}
   if(randomize_stimuli){
     psychTestR::join(
       psychTestR::begin_module(label = label),
       psychTestR::randomise_at_run_time(label,
                                         logic = gar_pages,
-                                        save_order = save_stimuli("stimulus_order")),
+                                        save_order = save_stimuli(sprintf("%s_stimulus_order", label))),
       if(MAS_IE) MAS_item_evaluation(dict = dict),
       psychTestR::end_module()
     )
@@ -127,7 +129,7 @@ GAR <- function(label = "EMO1",
       psychTestR::order_at_run_time(label,
                                     logic = gar_pages,
                                     get_order = function(...) 1:num_stimuli,
-                                    save_order = save_stimuli("stimulus_order")),
+                                    save_order = save_stimuli(sprintf("%s_stimulus_order", label))),
       if(MAS_IE) MAS_item_evaluation(dict = dict),
       # scoring
       psychTestR::end_module()
