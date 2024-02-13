@@ -9,9 +9,12 @@ AAT(
   sub_group = "a",
   items_prefix_pattern = "s\%03d",
   num_stimuli = 1,
+  item_order = NULL,
+  randomize_stimuli = FALSE,
   random_order = FALSE,
   with_module = F,
   header_style = NULL,
+  style = AAT_style,
   audio_url = "https://s3.eu-west-1.amazonaws.com/media.dots.org/stimuli/AAT",
   audio_type = "wav",
   allow_na = TRUE,
@@ -36,6 +39,8 @@ Wrap AAt into module.}
 
 \item{header_style}{(string)
 Header style to be pass on to make_ui_radiobutton_NAFC}
+
+\item{style}{(character scalar) CSS string for the radiobuttons}
 
 \item{audio_url}{(URL)
 Where are the stimuli?}
