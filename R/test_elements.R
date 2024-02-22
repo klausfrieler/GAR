@@ -62,7 +62,7 @@ radiobutton_matrix_page <- function(label,
                                     reduce_labels = TRUE,
                                     style = default_style,
                                     trigger_button_text = "Continue",
-                                    allow_na = TRUE,
+                                    allow_na = FALSE,
                                     failed_validation_message = "Answer missing!",
                                     save_answer = TRUE,
                                     hide_response_ui = FALSE,
@@ -118,13 +118,19 @@ radiobutton_matrix_page <- function(label,
     answer
 
   }
-
   validate <- function(answer,  ...) {
     valid  <- TRUE
     #messagef("[validate] allow_na: %s", allow_na)
-
-    if(!allow_na){
-      if(any(is.na(answer))){
+    if(is.logical(allow_na)){
+      if(!allow_na){
+        if(any(is.na(answer))){
+          valid <- failed_validation_message
+        }
+      }
+    }
+    else{
+      na_count <- sum(is.na(answer))
+      if(na_count > allow_na){
         valid <- failed_validation_message
       }
     }

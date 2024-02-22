@@ -49,8 +49,8 @@ get_AAT_stimulus_order <- function(num_stimuli){
 #' Where are the stimuli?
 #' @param audio_type (character scalar)
 #' Audio type of stimuli (as file extension)
-#' @param allow_na (boolean)
-#' Currently ignored
+#' @param allow_na (boolean, integer)
+#' Indicates whether unanswered radio buttons are allowed, if an integer then this is the number of NAs can be tolerated.
 #' @param dict (psychTestR dictionary object)
 #' You really want another dictionary?
 #' @export
@@ -66,13 +66,21 @@ AAT <- function(label = "AAT",
                 style = AAT_style,
                 audio_url = "https://s3.eu-west-1.amazonaws.com/media.dots.org/stimuli/AAT",
                 audio_type = "wav",
-                allow_na = TRUE,
+                allow_na = c("bipolar" = 2, "unipolar" = FALSE),
                 dict = GAR::GAR_dict,
                 ...) {
   if(!(sub_group %in% letters[1:4])){
     stop(sprintf("Unknown subgroup: %s", sub_group))
   }
-
+  if(length(allow_na) == 0 || length(allow_na) > 2){
+    stop(sprintf("allow_na must be logical/integer of length 1 or 2"))
+  }
+  if(length(allow_na)  == 2){
+    names(allow_na) <- c("bipolar", "unipolar")
+  }
+  if(length(allow_na)  == 1){
+    allow_na <- c("bipolar" = allow_na, "unipolar" = allow_na)
+  }
   aat_pages <-
     lapply(1:num_stimuli, function(id){
       page_label <- sprintf("%s_%03d", label, id)
@@ -264,9 +272,9 @@ get_sub_group_pages <- function(sub_group,
                                 item_id,
                                 num_stimuli,
                                 style = AAT_style,
-                                allow_na = TRUE,
                                 response_scale = "L7",
                                 header_style = NULL,
+                                allow_na = c("bipolar" = 2, "unipolar" = FALSE),
                                 ...){
   preamble_key <- sprintf("TGAR_AAT_PREAMBLE")
   scale_length <- 7
@@ -282,10 +290,10 @@ get_sub_group_pages <- function(sub_group,
                                   polarity = "bipolar",
                                   url = stimulus_url,
                                   instruction = shiny::p(
-                                    shiny::h4(
-                                      psychTestR::i18n("TGAR_AAT_ITEM_HEADER",
-                                                       sub = list(item_id = item_id,
-                                                                  num_stimuli = num_stimuli))),
+                                    # shiny::h4(
+                                    #   psychTestR::i18n("TGAR_AAT_ITEM_HEADER",
+                                    #                    sub = list(item_id = item_id,
+                                    #                               num_stimuli = num_stimuli))),
                                     psychTestR::i18n(preamble_key)),
                                   anchors = FALSE,
                                   header = "double",
@@ -294,13 +302,14 @@ get_sub_group_pages <- function(sub_group,
                                   reduce_labels = FALSE,
                                   style = style,
                                   trigger_button_text = psychTestR::i18n("CONTINUE"),
+                                  failed_validation_message = psychTestR::i18n("ANSWER_MISSING"),
                                   items = get_sub_group_items(sub_group, item_set, bipolar_items_sets[item_set]),
                                   choices = 0:(scale_length - 1),
                                   labels = get_sub_group_labels(sub_group, item_set, scale_length = scale_length),
                                   random_order = random_order,
                                   show_controls = TRUE,
                                   allow_download = FALSE,
-                                  allow_na = allow_na,
+                                  allow_na = allow_na[["bipolar"]],
                                   ...)))
   unipolar <- psychTestR::join(
     lapply(names(unipolar_items_sets), function(item_set){
@@ -308,10 +317,10 @@ get_sub_group_pages <- function(sub_group,
                                     polarity = "unipolar",
                                     url = stimulus_url,
                                     instruction = shiny::p(
-                                      shiny::h4(
-                                        psychTestR::i18n("TGAR_AAT_ITEM_HEADER",
-                                                         sub = list(item_id = item_id,
-                                                                    num_stimuli = num_stimuli))),
+                                      # shiny::h4(
+                                        # psychTestR::i18n("TGAR_AAT_ITEM_HEADER",
+                                        #                  sub = list(item_id = item_id,
+                                        #                             num_stimuli = num_stimuli))),
                                       psychTestR::i18n(preamble_key)),
                                     anchors = FALSE,
                                     header = "double",
@@ -320,16 +329,31 @@ get_sub_group_pages <- function(sub_group,
                                     sublabel_type = "directed",
                                     style = style,
                                     trigger_button_text = psychTestR::i18n("CONTINUE"),
+                                    failed_validation_message = psychTestR::i18n("ANSWER_MISSING"),
                                     items = get_sub_group_items(sub_group, item_set, unipolar_items_sets[item_set]),
                                     choices = 0:(scale_length - 1),
                                     labels = get_sub_group_labels(sub_group, item_set, scale_length = scale_length),
                                     random_order = random_order,
                                     show_controls = TRUE,
                                     allow_download = FALSE,
-                                    allow_na = allow_na,
+                                    allow_na = allow_na[["unipolar"]],
                                     ...)
       }))
   #browser()
   psychTestR::join(bipolar, unipolar)
+
+}
+test_AAT <- function(subgroup = "a"){
+  elts <- psychTestR::join(AAT(randomize_stimuli = T,
+                               label = "AAT",
+                               sub_group = subgroup,
+                               allow_na = c(2, 0)),
+                           psychTestR::new_timeline(
+                             psychTestR::final_page(psychTestR::i18n("CLOSE_BROWSER")), dict = GAR::GAR_dict))
+  psychTestR::make_test(elts,
+                        opt = psychTestR::test_options(title = c("en" = "Title", "de_f" = "Titel"),
+                                                       admin_password = "admin_password",
+                                                       researcher_email = "researcher_email",
+                                                       languages = c("de_f")))
 
 }

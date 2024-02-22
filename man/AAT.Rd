@@ -17,7 +17,7 @@ AAT(
   style = AAT_style,
   audio_url = "https://s3.eu-west-1.amazonaws.com/media.dots.org/stimuli/AAT",
   audio_type = "wav",
-  allow_na = TRUE,
+  allow_na = c(bipolar = 2, unipolar = FALSE),
   dict = GAR::GAR_dict,
   ...
 )
@@ -48,8 +48,8 @@ Where are the stimuli?}
 \item{audio_type}{(character scalar)
 Audio type of stimuli (as file extension)}
 
-\item{allow_na}{(boolean)
-Currently ignored}
+\item{allow_na}{(boolean, integer)
+Indicates whether unanswered radio buttons are allowed, if an integer then this is the number of NAs can be tolerated.}
 
 \item{dict}{(psychTestR dictionary object)
 You really want another dictionary?}
