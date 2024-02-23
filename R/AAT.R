@@ -340,14 +340,17 @@ get_sub_group_pages <- function(sub_group,
                                     ...)
       }))
   #browser()
-  psychTestR::join(bipolar, unipolar)
+  psychTestR::join(bipolar, unipolar,
+                   psychTestR::elt_save_results_to_disk(complete = F))
 
 }
-test_AAT <- function(subgroup = "a"){
+test_AAT <- function(subgroup = "a", num_stimuli = 1){
   elts <- psychTestR::join(AAT(randomize_stimuli = T,
+                               num_stimuli = num_stimuli,
                                label = "AAT",
                                sub_group = subgroup,
                                allow_na = c(2, 0)),
+                           psychTestR::elt_save_results_to_disk(complete = T),
                            psychTestR::new_timeline(
                              psychTestR::final_page(psychTestR::i18n("CLOSE_BROWSER")), dict = GAR::GAR_dict))
   psychTestR::make_test(elts,
