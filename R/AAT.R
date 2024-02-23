@@ -181,7 +181,7 @@ get_sub_group_labels <- function(sub_group, sub_scale, scale_length = 7){
   # }
   type <- "unipolar"
   if((sub_group == "a" || sub_group == "d") && substr(sub_scale, 1, 1) == "M" ) type <- "bipolar"
-  message(sprintf("Subscale: %s, sub_group: %s, scale: %s", sub_scale, sub_group, type))
+  #message(sprintf("Subscale: %s, sub_group: %s, scale: %s", sub_scale, sub_group, type))
   if(type == "bipolar"){
     label_key <- sprintf("TGAR_AAT_SD%s_CHOICE%%01d", scale_length)
     #label_key <- sprintf("TGAR_MAS%s_CHOICE%%01d", scale_length)
