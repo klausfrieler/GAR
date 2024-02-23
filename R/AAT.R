@@ -166,7 +166,7 @@ item_sets <- list("bipolar" = bipolar_items_sets,
 all_num_items <- c(bipolar_items_sets,
                    unipolar_items_sets)
 
-get_sub_group_labels <- function(sub_group, sub_scale, scale_length = 5){
+get_sub_group_labels <- function(sub_group, sub_scale, scale_length = 7){
   if(length(sub_scale) > 1){
     sub_scale <- sub_scale[[1]]
   }
@@ -180,8 +180,8 @@ get_sub_group_labels <- function(sub_group, sub_scale, scale_length = 5){
   #   }
   # }
   type <- "unipolar"
-  if(sub_group == "a" || sub_group == "d") type <- "bipolar"
-  #message(sprintf("Subscale: %s, sub_group: %s, scale: %s", sub_scale, sub_group, type))
+  if((sub_group == "a" || sub_group == "d") && substr(sub_scale, 1, 1) == "M" ) type <- "bipolar"
+  message(sprintf("Subscale: %s, sub_group: %s, scale: %s", sub_scale, sub_group, type))
   if(type == "bipolar"){
     label_key <- sprintf("TGAR_AAT_SD%s_CHOICE%%01d", scale_length)
     #label_key <- sprintf("TGAR_MAS%s_CHOICE%%01d", scale_length)
