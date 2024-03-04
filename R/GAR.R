@@ -107,10 +107,10 @@ GAR <- function(label = "EMO1",
       }
       else{
         stimuli <- sprintf(items_prefix_pattern, 1:num_stimuli)[order]
-      }
+      }#
       message(sprintf("Saving stimulus order for  %s (length: %d): %s",
                       label, length(order),
-                      paste(stimuli[order], collapse = ", ")))
+                      paste(stimuli, collapse = ", ")))
       psychTestR::save_result(state, label, stimuli)
     }}
   if(randomize_stimuli){
@@ -147,25 +147,31 @@ GAR <- function(label = "EMO1",
 MAS_item_evaluation <- function(label = "MAS_IE",
                                 style = default_style,
                                 header_style = NULL,
+                                random_order = FALSE,
                                 dict = GAR::GAR_dict){
 
-  psychTestR::new_timeline(
-    radiobutton_matrix_page(label = label,
-                            instruction = psychTestR::i18n("TGAR_MAS_IE_PREAMBLE"),
-                            anchors = FALSE,
-                            header = "double",
-                            header_style = header_style,
-                            sublabel_type = c("directed"),
-                            reduce_labels = FALSE,
-                            style = style,
-                            trigger_button_text = psychTestR::i18n("CONTINUE"),
-                            failed_validation_message = psychTestR::i18n("ANSWER_MISSING"),
-                            items = sapply(1:16, function(x) psychTestR::i18n(sprintf("TGAR_MAS_%04d_PROMPT", x)), simplify = T, USE.NAMES = T),
-                            choices = 0:4,
-                            labels = sapply(1:5, function(x) psychTestR::i18n(sprintf("TGAR_MAS_IE5_CHOICE%d", x)), simplify = T, USE.NAMES = T),
-                            random_order = FALSE,
-                            allow_na = FALSE),
-    dict = dict)
+  psychTestR::join(
+    psychTestR::begin_module("MAS_IE"),
+    psychTestR::new_timeline(
+      radiobutton_matrix_page(label = label,
+                              instruction = psychTestR::i18n("TGAR_MAS_IE_PREAMBLE"),
+                              anchors = FALSE,
+                              header = "double",
+                              header_style = header_style,
+                              sublabel_type = c("directed"),
+                              reduce_labels = FALSE,
+                              style = style,
+                              trigger_button_text = psychTestR::i18n("CONTINUE"),
+                              failed_validation_message = psychTestR::i18n("ANSWER_MISSING"),
+                              items = sapply(1:16, function(x) psychTestR::i18n(sprintf("TGAR_MAS_%04d_PROMPT", x)), simplify = T, USE.NAMES = T),
+                              choices = 0:4,
+                              labels = sapply(1:5, function(x) psychTestR::i18n(sprintf("TGAR_MAS_IE5_CHOICE%d", x)), simplify = T, USE.NAMES = T),
+                              random_order = random_order,
+                              allow_na = FALSE),
+      dict = dict
+    ),
+    psychTestR::end_module()
+  )
 
 
 
