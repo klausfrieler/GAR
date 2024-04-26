@@ -46,7 +46,6 @@ GAR <- function(label = "EMO1",
   }
   if(questionnaire == "AAT"){
     return(AAT(label,
-               allow_na = allow_na,
                num_stimuli = num_stimuli,
                audio_url = audio_url,
                audio_type = audio_type,
