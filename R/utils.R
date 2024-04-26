@@ -22,9 +22,9 @@ is.character.or.numeric <- function(x) {
   is.character(x) || is.numeric(x)
 }
 
-is.na.or.null <- function(x) {
-  is.na(x) || is.null(x)
-}
+# is.na.or.null <- function(x) {
+#   is.na(x) || is.null(x)
+# }
 
 tagify <- function(x) {
   stopifnot(is.character(x) || is(x, "shiny.tag"))

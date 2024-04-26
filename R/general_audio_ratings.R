@@ -1,8 +1,8 @@
 #' General Audio Rating package
 #'
-#' Contains the several simple audio rating scales.
+#' Container for simple and complex audio rating scales.
 #'
-#' @docType package
+#' @docType _PACKAGE
 #'
 #' @author Klaus Frieler \email{klaus.frieler@ae.mpg.de}
 #'
