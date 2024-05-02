@@ -4,7 +4,7 @@ TGAR_MAS_PREAMBLE;Bitte beurteilen Sie die Musik auf folgenden Aspekten.;Bitte b
 TGAR_MAS_0001_PROMPT;Der Aufbau der Musik ist rundum gelungen.;Der Aufbau der Musik ist rundum gelungen.;The construction of the music is well done.
 TGAR_MAS_0002_PROMPT;Das Musikstück ist hervorragend komponiert und/oder arrangiert.;Das Musikstück ist hervorragend komponiert und/oder arrangiert.;The piece of music is excellently composed and/or arranged.
 TGAR_MAS_0003_PROMPT;Dieses Musikstück ist richtig gut gemacht.;Dieses Musikstück ist richtig gut gemacht.;The piece is really well crafted.
-TGAR_MAS_0004_PROMPT;Dieses Musikstück ist richtig gut durchdacht.;Dieses Musikstück ist richtig gut durchdacht.;The piece is really well thought-through.
+TGAR_MAS_0004_PROMPT;Dieses Musikstück ist gut durchdacht.;Dieses Musikstück ist gut durchdacht.;The piece is really well thought-through.
 TGAR_MAS_0005_PROMPT;Das ist ein richtig gutes Musikstück.;Das ist ein richtig gutes Musikstück.;This is a really good piece of music.
 TGAR_MAS_0006_PROMPT;Diese Komposition bzw. diese Version der Komposition ist künstlerisch wertvoll.;Diese Komposition bzw. diese Version der Komposition  ist künstlerisch wertvoll.;This piece of music is artistically valuable.
 TGAR_MAS_0007_PROMPT;Die Komponist:innen (Songwriter:innen, Producer:innen) des Stücks sind offenkundig Meister:innen ihres Fachs.;Die Komponisten/Komponistinnen (Songwriter:innen, Producer:innen) des Stücks sind offenkundig Meister:innen ihres Fachs.;The creator(s) of the piece are obviously masters of their craft.
@@ -14,7 +14,7 @@ TGAR_MAS_0010_PROMPT;Leute, die sich mit dieser Musikrichtung auskennen, wären 
 TGAR_MAS_0011_PROMPT;Die Musiker:innen haben eine hervorragende Spieltechnik. ;Die Musiker:innen haben eine hervorragende Spieltechnik. ;The musicians have an excellent playing technique. 
 TGAR_MAS_0012_PROMPT;Die Performance war rundum gelungen.;Die Performance war rundum gelungen.;The musical interpretation was successful all round.
 TGAR_MAS_0013_PROMPT;Das Spiel der Musiker:innen war sehr professionell.;Das Spiel der Musiker:innen war sehr professionell.;The musicians' playing was very professional.
-TGAR_MAS_0014_PROMPT;Das Zusammenspiel der Musiker:innen war perfekt.;Das Zusammenspiel der Musiker:innen war perfekt.;The interaction between the musicians was perfect.
+TGAR_MAS_0014_PROMPT;Das Zusammenspiel der einzelnen Stimmen/Instrumente war perfekt.;Das Zusammenspiel der einzelnen Stimmen/Instrumente war perfekt.;The interaction between the musicians was perfect.
 TGAR_MAS_0015_PROMPT;Die Musiker:innen haben das Stück sehr gut gespielt.;Die Musiker:innen haben das Stück sehr gut gespielt.;The musicians played the piece very well.
 TGAR_MAS_0016_PROMPT;Die Musiker:innen wurden den Anforderungen des Stückes absolut gerecht.;Die Musiker:innen wurden den Anforderungen des Stückes absolut gerecht.;The musicians absolutely met the requirements of the piece.
 TGAR_MAS_0017_PROMPT;Die Musiker:innen beherrschen ihre Instrumente.;Die Musiker:innen beherrschen ihre Instrumente.;The musicians are masters of their instruments.
