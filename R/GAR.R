@@ -77,26 +77,29 @@ GAR <- function(label = "EMO1",
                                                      audio_type))
       }
       #browser()
-      psychTestR::new_timeline(
-      audio_radiobutton_matrix_page(label = page_label,
-                                    url = stimulus_url,
-                                    instruction =  psychTestR::i18n(preamble_key),
-                                    anchors = anchors,
-                                    header = header,
-                                    header_style = header_style,
-                                    sublabel_type = "directed",
-                                    reduce_labels = reduce_labels,
-                                    style = style,
-                                    trigger_button_text = psychTestR::i18n("CONTINUE"),
-                                    failed_validation_message = psychTestR::i18n("ANSWER_MISSING"),
-                                    items = sapply(1:num_rating_items, function(x) psychTestR::i18n(sprintf(prompt_key, x)), simplify = T, USE.NAMES = T),
-                                    choices = 0:(scale_length-1),
-                                    labels = sapply(1:scale_length, function(x) psychTestR::i18n(sprintf(label_key, x)), simplify = T, USE.NAMES = T),
-                                    random_order = random_order,
-                                    show_controls = show_controls,
-                                    allow_download = allow_download,
-                                    allow_na = allow_na),
-      dict = dict)
+      psychTestR::join(
+        psychTestR::new_timeline(
+        audio_radiobutton_matrix_page(label = page_label,
+                                      url = stimulus_url,
+                                      instruction =  psychTestR::i18n(preamble_key),
+                                      anchors = anchors,
+                                      header = header,
+                                      header_style = header_style,
+                                      sublabel_type = "directed",
+                                      reduce_labels = reduce_labels,
+                                      style = style,
+                                      trigger_button_text = psychTestR::i18n("CONTINUE"),
+                                      failed_validation_message = psychTestR::i18n("ANSWER_MISSING"),
+                                      items = sapply(1:num_rating_items, function(x) psychTestR::i18n(sprintf(prompt_key, x)), simplify = T, USE.NAMES = T),
+                                      choices = 0:(scale_length-1),
+                                      labels = sapply(1:scale_length, function(x) psychTestR::i18n(sprintf(label_key, x)), simplify = T, USE.NAMES = T),
+                                      random_order = random_order,
+                                      show_controls = show_controls,
+                                      allow_download = allow_download,
+                                      allow_na = allow_na),
+        dict = dict),
+        psychTestR::elt_save_results_to_disk(complete = F))
+
     })
   save_stimuli <- function(label){
     function(order, state, ...){
