@@ -33,6 +33,7 @@ GAR <- function(label = "EMO1",
                 allow_download = FALSE,
                 question_header_offset = 0,
                 question_header_max = num_stimuli,
+                vertical = FALS,
                 ...) {
   #browser()
   dots <- list(...)
@@ -77,28 +78,54 @@ GAR <- function(label = "EMO1",
                                                      audio_type))
       }
       #browser()
-      psychTestR::join(
-        psychTestR::new_timeline(
-        audio_radiobutton_matrix_page(label = page_label,
-                                      url = stimulus_url,
-                                      instruction =  psychTestR::i18n(preamble_key),
-                                      anchors = anchors,
-                                      header = header,
-                                      header_style = header_style,
-                                      sublabel_type = "directed",
-                                      reduce_labels = reduce_labels,
-                                      style = style,
-                                      trigger_button_text = psychTestR::i18n("CONTINUE"),
-                                      failed_validation_message = psychTestR::i18n("ANSWER_MISSING"),
-                                      items = sapply(1:num_rating_items, function(x) psychTestR::i18n(sprintf(prompt_key, x)), simplify = T, USE.NAMES = T),
-                                      choices = 0:(scale_length-1),
-                                      labels = sapply(1:scale_length, function(x) psychTestR::i18n(sprintf(label_key, x)), simplify = T, USE.NAMES = T),
-                                      random_order = random_order,
-                                      show_controls = show_controls,
-                                      allow_download = allow_download,
-                                      allow_na = allow_na),
-        dict = dict),
-        psychTestR::elt_save_results_to_disk(complete = F))
+      if(!vertical){
+        psychTestR::join(
+          psychTestR::new_timeline(
+            audio_radiobutton_matrix_page(label = page_label,
+                                          url = stimulus_url,
+                                          instruction =  psychTestR::i18n(preamble_key),
+                                          anchors = anchors,
+                                          header = header,
+                                          header_style = header_style,
+                                          sublabel_type = "directed",
+                                          reduce_labels = reduce_labels,
+                                          style = style,
+                                          trigger_button_text = psychTestR::i18n("CONTINUE"),
+                                          failed_validation_message = psychTestR::i18n("ANSWER_MISSING"),
+                                          items = sapply(1:num_rating_items, function(x) psychTestR::i18n(sprintf(prompt_key, x)), simplify = T, USE.NAMES = T),
+                                          choices = 0:(scale_length-1),
+                                          labels = sapply(1:scale_length, function(x) psychTestR::i18n(sprintf(label_key, x)), simplify = T, USE.NAMES = T),
+                                          random_order = random_order,
+                                          show_controls = show_controls,
+                                          allow_download = allow_download,
+                                          allow_na = allow_na),
+            dict = dict),
+          psychTestR::elt_save_results_to_disk(complete = F))
+      } else{
+        psychTestR::join(
+          psychTestR::new_timeline(
+            audio_radiobutton_multi_NAFC_page(
+              label = page_label,
+              prompt =  psychTestR::i18n(preamble_key),
+              items = sapply(1:num_rating_items, function(x)
+                psychTestR::i18n(sprintf(prompt_key, x)), simplify = T, USE.NAMES = T),
+              choices = as.character(0:(scale_length - 1)),
+              labels = sapply(1:scale_length, function(x)
+                psychTestR::i18n(sprintf(label_key, x)), simplify = T, USE.NAMES = T),
+              audio_url = stimulus_url,
+              audio_type = tools::file_ext(stimulus_url),
+              #style = style,
+              trigger_button_text = psychTestR::i18n("CONTINUE"),
+              failed_validation_message = psychTestR::i18n("ANSWER_MISSING"),
+              random_order = random_order,
+              show_controls = show_controls,
+              allow_download = allow_download,
+              allow_na = allow_na
+            ),
+            dict = dict),
+          psychTestR::elt_save_results_to_disk(complete = F))
+
+      }
 
     })
   save_stimuli <- function(label){

@@ -29,6 +29,7 @@ GAR(
   allow_download = FALSE,
   question_header_offset = 0,
   question_header_max = num_stimuli,
+  vertical = FALS,
   ...
 )
 }

@@ -29,6 +29,7 @@ GAR_standalone(
   allow_download = FALSE,
   admin_password = "groove",
   researcher_email = NULL,
+  vertical = FALSE,
   languages = GAR::languages(),
   validate_id = "auto",
   ...

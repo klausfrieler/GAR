@@ -4,13 +4,20 @@ default_style <-
                     label_widths = c(left = "0px",
                                      right = "0px"),
                     label_styles =  c(left = "",
-                                      right = "")),
+                                      right = ""),
+                    choice_style = ""),
     bipolar = list(row_id_style = "width:0px;visibility:hidden",
                    label_widths = c(left = "100px",
                                     right = "100px"),
                    label_syles = c(left = "text-align:left;min-width:100px",
-                                   right = "text-align:left;min-width:100px")),
-    div_style = "width:60%;margin-left:20%;margin-right:20%")
+                                   right = "text-align:left;min-width:100px"),
+                   choice_style = ""),
+    div_style = "width:60%;margin-left:auto;margin-right:auto")
+
+sub_null <- function(value, sub = ""){
+  if(is.null(value)) value <- sub
+  value
+}
 #' New radio button matrix page
 #'
 #' Creates a  radio button matrix pag for n items with m Likert-type choices
@@ -290,7 +297,7 @@ make_ui_radiobutton_matrix <- function(label,
                                                    labelsWidth = style[[polarity]]$label_widths,
                                                    LLabelStyle = style[[polarity]]$label_styles[["left"]],
                                                    RLabelStyle = style[[polarity]]$label_styles[["right"]],
-                                                   choiceStyle = "",
+                                                   choiceStyle = sub_null(style[[polarity]]$choice_style),
                                                    LLabPos = 0,
                                                    RLabPos = length(reduced_labels) + 1)
   shiny::tags$div(id = id,
