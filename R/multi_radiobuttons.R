@@ -178,12 +178,12 @@ make_ui_radiobutton_multi_NAFC <-
     }
     labels <-
       purrr::map(labels, function(label)
-        shiny::tags$span(style = "font-size: 15px; line-height: 15px; min-height:15px", label))
+        shiny::tags$span(style = "font-size: 15px; line-height: 15px; min-height: 15px", label))
 
 
     radiobuttons_div <-
       purrr::map(1:length(items), function(idx){
-        item_div <- shiny::tags$div(items[idx], style = "text-align:left;color:red")
+        item_div <- shiny::tags$div(items[idx], style = "text-align: left; max-width:300px; color: #1f77b4;font-weight: bold")
         shiny::tags$div(
           style = "text-align: left;",
           item_div,
