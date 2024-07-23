@@ -33,7 +33,9 @@ GAR <- function(label = "EMO1",
                 allow_download = FALSE,
                 question_header_offset = 0,
                 question_header_max = num_stimuli,
-                vertical = FALS,
+                vertical = FALSE,
+                wait = TRUE,
+                loop = FALSE,
                 ...) {
   #browser()
   dots <- list(...)
@@ -98,7 +100,9 @@ GAR <- function(label = "EMO1",
                                           random_order = random_order,
                                           show_controls = show_controls,
                                           allow_download = allow_download,
-                                          allow_na = allow_na),
+                                          allow_na = allow_na,
+                                          wait = wait,
+                                          loop = loop),
             dict = dict),
           psychTestR::elt_save_results_to_disk(complete = F))
       } else{
@@ -120,7 +124,9 @@ GAR <- function(label = "EMO1",
               random_order = random_order,
               show_controls = show_controls,
               allow_download = allow_download,
-              allow_na = allow_na
+              allow_na = allow_na,
+              wait = wait,
+              loop = loop
             ),
             dict = dict),
           psychTestR::elt_save_results_to_disk(complete = F))

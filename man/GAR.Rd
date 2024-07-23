@@ -29,7 +29,9 @@ GAR(
   allow_download = FALSE,
   question_header_offset = 0,
   question_header_max = num_stimuli,
-  vertical = FALS,
+  vertical = FALSE,
+  wait = TRUE,
+  loop = FALSE,
   ...
 )
 }
@@ -49,6 +51,11 @@ participant, so that they can control audio playback.}
 
 \item{allow_download}{Whether the participant is given a button to download
 the audio file; only relevant if \code{show_controls} is \code{TRUE}.}
+
+\item{wait}{Whether to wait for the audio to finish before displaying the
+response buttons.}
+
+\item{loop}{Whether the audio should loop.}
 }
 \description{
 This function defines a module for rating music or audio excerpts on a list of Likert items;
