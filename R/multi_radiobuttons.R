@@ -183,7 +183,7 @@ make_ui_radiobutton_multi_NAFC <-
 
     radiobuttons_div <-
       purrr::map(1:length(items), function(idx){
-        item_div <- shiny::tags$div(items[idx], style = "text-align: left; max-width:300px; color: #1f77b4;font-weight: bold")
+        item_div <- shiny::tags$div(items[idx], style = "text-align: left; max-width:390px; color: #1f77b4;font-weight: bold")
         shiny::tags$div(
           style = "text-align: left;",
           item_div,
