@@ -9,6 +9,7 @@ MAS_item_evaluation(
   style = default_style,
   header_style = NULL,
   random_order = FALSE,
+  vertical = TRUE,
   dict = GAR::GAR_dict
 )
 }

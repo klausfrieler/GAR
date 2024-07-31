@@ -126,3 +126,19 @@ test_aat_item_eval_pages <- function(scale_length = 5, nested = F){
                                                        researcher_email = "researcher_email",
                                                        languages = c("de_f")))
 }
+
+test_MAS_item_eval_pages <- function(scale_length = 5, nested = F, vertical = T){
+  mas_items <- MAS_item_evaluation(label = "MIE", vertical = vertical, random_order = F)
+  elts <- psychTestR::join(mas_items,
+                           psychTestR::code_block(function(state, ...){
+                             res <- psychTestR::get_results(state, complete = T)
+                             #browser()
+                           }),
+                           psychTestR::new_timeline(
+                             psychTestR::final_page(psychTestR::i18n("CLOSE_BROWSER")), dict = GAR::GAR_dict))
+  psychTestR::make_test(elts,
+                        opt = psychTestR::test_options(title = c("en" = "Title", "de_f" = "Titel"),
+                                                       admin_password = "admin_password",
+                                                       researcher_email = "researcher_email",
+                                                       languages = c("de_f")))
+}

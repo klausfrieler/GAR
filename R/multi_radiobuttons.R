@@ -67,19 +67,23 @@ audio_radiobutton_multi_NAFC_page <-
       is.character(choices),
       length(choices) > 0L
     )
-    audio_ui <- shiny::tags$div(shiny::tags$audio(
-      shiny::tags$head(shiny::tags$script(shiny::HTML(media.js$media_not_played))),
-      shiny::tags$source(src = audio_url, type = paste0("audio/", audio_type)),
-      id = "media",
-      preload = "auto",
-      autoplay = "autoplay",
-      loop = if (loop) "loop",
-      oncanplaythrough = media.js$show_media_btn,
-      onplay = paste0(media.js$media_played, media.js$hide_media_btn),
-      onended = if (wait) media.js$show_responses else "null",
-      controls = if (show_controls) "controls",
-      controlsList = if (!allow_download) "nodownload"
-    ), media_mobile_play_button(btn_play_prompt))
+    audio_ui <- NULL
+    if(!is.null(audio_url)){
+      audio_ui <- shiny::tags$div(shiny::tags$audio(
+        shiny::tags$head(shiny::tags$script(shiny::HTML(media.js$media_not_played))),
+        shiny::tags$source(src = audio_url, type = paste0("audio/", audio_type)),
+        id = "media",
+        preload = "auto",
+        autoplay = "autoplay",
+        loop = if (loop) "loop",
+        oncanplaythrough = media.js$show_media_btn,
+        onplay = paste0(media.js$media_played, media.js$hide_media_btn),
+        onended = if (wait) media.js$show_responses else "null",
+        controls = if (show_controls) "controls",
+        controlsList = if (!allow_download) "nodownload"
+      ), media_mobile_play_button(btn_play_prompt))
+
+    }
 
     prompt2 <- shiny::tags$div(tagify(prompt),
                                     #shiny::span(url, style = "color:red"),
