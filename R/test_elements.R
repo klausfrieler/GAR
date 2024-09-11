@@ -397,10 +397,12 @@ audio_radiobutton_matrix_page <- function(label,
     controls = if (show_controls) "controls",
     controlsList = if (!allow_download) "nodownload"
   ), media_mobile_play_button(btn_play_prompt))
-  instruction2 <- shiny::tags$div(tagify(instruction),
-                                  #shiny::span(url, style = "color:red"),
-                                  audio_ui)
 
+  instruction2 <- shiny::tags$div(
+    shiny::tags$script("window.scrollTo(0, 0)"),
+    tagify(instruction), #shiny::span(url, style = "color:red"),
+    audio_ui)
+  browser()
   radiobutton_matrix_page(label = label,
                           polarity = polarity,
                           items = items,

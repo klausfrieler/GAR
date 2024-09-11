@@ -86,8 +86,10 @@ audio_radiobutton_multi_NAFC_page <-
     }
 
     prompt2 <- shiny::tags$div(tagify(prompt),
-                                    #shiny::span(url, style = "color:red"),
-                                    audio_ui)
+                               shiny::tags$script("window.scrollTo(0, 0)"),
+
+                               #shiny::span(url, style = "color:red"),
+                               audio_ui)
     item_order <- 1:length(items)
     if(random_order){
       item_order <- sample(1:length(items))
