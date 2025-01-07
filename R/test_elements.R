@@ -402,7 +402,7 @@ audio_radiobutton_matrix_page <- function(label,
     shiny::tags$script("window.scrollTo(0, 0)"),
     tagify(instruction), #shiny::span(url, style = "color:red"),
     audio_ui)
-  browser()
+  #browser()
   radiobutton_matrix_page(label = label,
                           polarity = polarity,
                           items = items,
