@@ -70,6 +70,7 @@ GAR_standalone <- function(label = "EMO1",
                                       psychTestR::i18n("CLOSE_BROWSER"))),
       dict = dict)
     )
+  browser()
   title <- unlist(rlang::set_names(
     purrr::map(GAR::languages(), function(x)
       GAR::GAR_dict$translate(sprintf("TGAR_%s_TITLE", questionnaire), x)),
