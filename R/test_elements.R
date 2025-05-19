@@ -67,6 +67,7 @@ radiobutton_matrix_page <- function(label,
                                     header_style = NULL,
                                     sublabel_type = c("none", "directed", "symmetric"),
                                     reduce_labels = TRUE,
+                                    reverse_anchors = FALSE,
                                     style = default_style,
                                     trigger_button_text = "Continue",
                                     allow_na = FALSE,
@@ -109,6 +110,7 @@ radiobutton_matrix_page <- function(label,
                                                    header_style = header_style,
                                                    sublabel_type = sublabel_type,
                                                    reduce_labels = reduce_labels,
+                                                   reverse_anchors = reverse_anchors,
                                                    hide = hide_response_ui,
                                                    id = response_ui_id))
   itemlist <- 1:length(items)
@@ -120,7 +122,9 @@ radiobutton_matrix_page <- function(label,
          else NA
     }) %>% unlist()
     #names(answer) <- stringr::str_remove_all(stringr::str_replace_all(tolower(names(answer)), " ", "_"), "[.]")
-
+    if(reverse_anchors){
+      answer <- length(labels)  - answer - 1
+    }
     names(answer) <- sprintf("%s.q%d", label, item_order)
     answer
 
@@ -185,6 +189,7 @@ radiobutton_matrix_page <- function(label,
 #' @param polarity ("unipolar" or "bipolar") Determines whether scale will be unipolar (one label) or bipolar (two labels)
 #' @param reduce_labels (boolean) Shall a only the endpoints of choice labels being labelled?
 #' @param anchors (boolean)  Only for unipolar items: show scale labels?
+#' @param reverse_anchors (boolean)  Reverse the scale direction
 #' @param style (character scalar) CSS string for the radiobuttons
 #' @param header (character scale) One of simple_num, simple_str or double. simple_num only displays numbers in the header, simple_str uses verbal labels given in parameter choices, double used both.
 #' @inheritParams psychTestR::page
@@ -202,6 +207,7 @@ make_ui_radiobutton_matrix <- function(label,
                                                   "simple_str",
                                                   "double"),
                                        sublabel_type = c("none", "directed", "symmetric"),
+                                       reverse_anchors = FALSE,
                                        header_style = NULL,
                                        trigger_button_text = "Continue",
                                        hide = FALSE,
@@ -218,6 +224,9 @@ make_ui_radiobutton_matrix <- function(label,
     else
       names(choices)
   }
+  if(reverse_anchors){
+    scale_labels <- rev(scale_labels)
+  }
   reduced_labels <- rep("", length(scale_labels))
   reduced_labels[1] <- scale_labels[1]
   reduced_labels[length(reduced_labels)] <- scale_labels[length(reduced_labels)]
@@ -226,6 +235,11 @@ make_ui_radiobutton_matrix <- function(label,
     scale_labels <- reduced_labels
   }
   sub_labels <- get_sublabels(sublabel_type, length(scale_labels))
+
+  if(reverse_anchors){
+    sub_labels <- rev(sub_labels)
+  }
+
   if(header == "simple_num"){
     if(polarity == "unipolar") {
       choiceNames <- 1:length(scale_labels)
@@ -357,6 +371,7 @@ audio_radiobutton_matrix_page <- function(label,
                                           anchors = FALSE,
                                           header = "double",
                                           header_style = NULL,
+                                          reverse_anchors = FALSE,
                                           sublabel_type = c("none", "directed", "symmetric"),
                                           style = default_style,
                                           reduce_labels = TRUE,
@@ -414,6 +429,7 @@ audio_radiobutton_matrix_page <- function(label,
                           header_style = header_style,
                           sublabel_type = sublabel_type,
                           reduce_labels = reduce_labels,
+                          reverse_anchors = reverse_anchors,
                           style = style,
                           trigger_button_text = trigger_button_text,
                           allow_na = allow_na,

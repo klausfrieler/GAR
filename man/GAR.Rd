@@ -32,6 +32,7 @@ GAR(
   vertical = FALSE,
   wait = TRUE,
   loop = FALSE,
+  reverse_anchors = FALSE,
   ...
 )
 }

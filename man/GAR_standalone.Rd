@@ -16,6 +16,7 @@ GAR_standalone(
   header = "double",
   header_style = NULL,
   reduce_labels = TRUE,
+  reverse_anchors = FALSE,
   style = default_style,
   allow_na = TRUE,
   audio_url =

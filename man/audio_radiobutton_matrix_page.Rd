@@ -15,6 +15,7 @@ audio_radiobutton_matrix_page(
   anchors = FALSE,
   header = "double",
   header_style = NULL,
+  reverse_anchors = FALSE,
   sublabel_type = c("none", "directed", "symmetric"),
   style = default_style,
   reduce_labels = TRUE,

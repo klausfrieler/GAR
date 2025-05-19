@@ -17,6 +17,7 @@ GAR_standalone <- function(label = "EMO1",
                            header = "double",
                            header_style = NULL,
                            reduce_labels = TRUE,
+                           reverse_anchors = FALSE,
                            style = default_style,
                            allow_na = TRUE,
                            audio_url = "https://s3.eu-west-1.amazonaws.com/media.gold-msi.org/test_materials/GAR/EMO1",
@@ -53,6 +54,7 @@ GAR_standalone <- function(label = "EMO1",
         header_style = header_style,
         anchors = anchors,
         reduce_labels = reduce_labels,
+        reverse_anchors = reverse_anchors,
         style = style,
         audio_url = audio_url,
         audio_type = audio_type,
@@ -70,7 +72,7 @@ GAR_standalone <- function(label = "EMO1",
                                       psychTestR::i18n("CLOSE_BROWSER"))),
       dict = dict)
     )
-  browser()
+  #browser()
   title <- unlist(rlang::set_names(
     purrr::map(GAR::languages(), function(x)
       GAR::GAR_dict$translate(sprintf("TGAR_%s_TITLE", questionnaire), x)),

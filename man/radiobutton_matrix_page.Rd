@@ -16,6 +16,7 @@ radiobutton_matrix_page(
   header_style = NULL,
   sublabel_type = c("none", "directed", "symmetric"),
   reduce_labels = TRUE,
+  reverse_anchors = FALSE,
   style = default_style,
   trigger_button_text = "Continue",
   allow_na = FALSE,

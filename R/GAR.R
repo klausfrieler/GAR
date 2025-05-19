@@ -36,6 +36,7 @@ GAR <- function(label = "EMO1",
                 vertical = FALSE,
                 wait = TRUE,
                 loop = FALSE,
+                reverse_anchors = FALSE,
                 ...) {
   #browser()
   dots <- list(...)
@@ -91,6 +92,7 @@ GAR <- function(label = "EMO1",
                                           header_style = header_style,
                                           sublabel_type = "directed",
                                           reduce_labels = reduce_labels,
+                                          reverse_anchors = reverse_anchors,
                                           style = style,
                                           trigger_button_text = psychTestR::i18n("CONTINUE"),
                                           failed_validation_message = psychTestR::i18n("ANSWER_MISSING"),
