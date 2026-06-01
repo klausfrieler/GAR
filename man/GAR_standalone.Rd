@@ -45,6 +45,8 @@ GAR_standalone(
 
 \item{reduce_labels}{(boolean) Shall a only the endpoints of choice labels being labelled?}
 
+\item{reverse_anchors}{(boolean)  Reverse the scale direction}
+
 \item{style}{(character scalar) CSS string for the radiobuttons}
 
 \item{show_controls}{Whether or not to show audio controls to the

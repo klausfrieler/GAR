@@ -63,6 +63,8 @@ or a list of Shiny tag objects, e.g. as created by \code{shiny::HTML()}.}
 
 \item{header}{(character scale) One of simple_num, simple_str or double. simple_num only displays numbers in the header, simple_str uses verbal labels given in parameter choices, double used both.}
 
+\item{reverse_anchors}{(boolean)  Reverse the scale direction}
+
 \item{style}{(character scalar) CSS string for the radiobuttons}
 
 \item{reduce_labels}{(boolean) Shall a only the endpoints of choice labels being labelled?}

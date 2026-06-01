@@ -54,6 +54,8 @@ or a list of Shiny tag objects, e.g. as created by \code{shiny::HTML()}.}
 
 \item{reduce_labels}{(boolean) Shall a only the endpoints of choice labels being labelled?}
 
+\item{reverse_anchors}{(boolean)  Reverse the scale direction}
+
 \item{style}{(character scalar) CSS string for the radiobuttons}
 
 \item{trigger_button_text}{(Character scalar) Text for the trigger button.}

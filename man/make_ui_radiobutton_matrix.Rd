@@ -49,6 +49,8 @@ will be used for button labels.}
 
 \item{header}{(character scale) One of simple_num, simple_str or double. simple_num only displays numbers in the header, simple_str uses verbal labels given in parameter choices, double used both.}
 
+\item{reverse_anchors}{(boolean)  Reverse the scale direction}
+
 \item{trigger_button_text}{(Character scalar) Text for the trigger button.}
 
 \item{hide}{(Boolean scalar) Whether to begin with the response

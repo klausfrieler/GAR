@@ -57,6 +57,8 @@ the audio file; only relevant if \code{show_controls} is \code{TRUE}.}
 response buttons.}
 
 \item{loop}{Whether the audio should loop.}
+
+\item{reverse_anchors}{(boolean)  Reverse the scale direction}
 }
 \description{
 This function defines a module for rating music or audio excerpts on a list of Likert items;
